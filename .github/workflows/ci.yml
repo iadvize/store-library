@@ -98,6 +98,6 @@ jobs:
       run: |
         for PACKAGE in ${PACKAGES//,/ }; do
           echo $PACKAGE
-          (cd $PACKAGE; npm test test:js)
+          (cd $PACKAGE; npm run test:js)
         done
 
