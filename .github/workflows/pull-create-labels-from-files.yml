@@ -1,0 +1,59 @@
+name: Pull request labels autocreation
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  create-labels-from-files:
+    name: 'create labels from files'
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Create labels from files
+      id: version
+      uses: actions/github-script@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { data: files } = await github.pulls.listFiles({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number,
+            per_page: 100,
+          });
+
+          const labelSet = files.reduce(
+            (labels, file) => {
+              const filePath = file.filename;
+
+              const maybeMatch = /packages\/([\w.\-_]*)\/.*/.exec(filePath);
+
+              if (!maybeMatch) {
+                return labels;
+              }
+
+              const [, packageName] = maybeMatch;
+
+              const label = `packages/${packageName}`;
+
+              labels.add(label);
+
+              return labels;
+            },
+            new Set([]),
+          );
+
+          if (labelSet.size === 0) {
+            console.log(`::debug ::No labels extracted from files`);
+            return;
+          }
+
+          const labels = Array.from(labelSet);
+
+          await github.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            labels,
+          });

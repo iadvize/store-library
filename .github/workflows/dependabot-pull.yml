@@ -1,0 +1,32 @@
+name: Dependabot pull additions
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  add-assignee:
+    name: 'add assignee'
+    runs-on: ubuntu-18.04
+
+    if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
+
+    steps:
+    - name: Add assignee
+      uses: actions/github-script@v2
+      with:
+        github-token: ${{ secrets.TOKEN_REPO_WRITE }}
+        script: |
+          await github.issues.addAssignees({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            assignees: ['iadvizeponey']
+          });
+
+          await github.pulls.createReview({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number,
+            event: "APPROVE",
+          });

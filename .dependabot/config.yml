@@ -1,0 +1,19 @@
+version: 1
+
+update_configs:
+  - package_manager: "javascript"
+    directory: "/packages/hello-1"
+    update_schedule: "live"
+    version_requirement_updates: "increase_versions"
+    commit_message:
+      prefix: "misc"
+    default_labels:
+      - "ActionL no bump"
+      - "packages/hello-1"
+    allowed_updates:
+      - match:
+          dependency_name: "nothing"
+    automerged_updates:
+      - match:
+          dependency_type: "development"
+          update_type: "in_range"

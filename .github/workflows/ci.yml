@@ -1,0 +1,103 @@
+name: Continuous integration
+
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  ci:
+    name: 'install, build, lint, test'
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-verion: '12.x'
+
+    - name: Cache npm cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: v1-npm-${{ github.ref }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          v1-npm-${{ github.ref }}-
+          v1-npm-
+
+    - name: List all packages
+      id: all-packages
+      run: |
+        PACKAGES=$(ls -d packages/* | paste -sd "," -)
+        echo "::set-output name=packages::$PACKAGES"
+
+    - name: List pull packages
+      id: packages
+      uses: actions/github-script@v2
+      env:
+        PACKAGES_PUSH: ${{ steps.all-packages.outputs.packages }}
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          if (context.eventName !== 'pull_request') {
+            console.log(`::set-output name=packages::${process.env.PACKAGES_PUSH}`);
+            return;
+          }
+
+          const { data: pullLabels } = await github.issues.listLabelsOnIssue({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            per_page: 100,
+          });
+
+          const labels = pullLabels.map(label => label.name);
+          const packageLabels = labels.filter(name => name.includes('packages/'));
+
+          if (packageLabels.length === 1) {
+            console.log(`::set-output name=packages::${packageLabels[0]}`);
+            return;
+          }
+
+          console.log(`::set-output name=packages::${process.env.PACKAGES_PUSH}`);
+
+    - name: Install
+      if: steps.node-modules-cache.outputs.cache-hit != 'true'
+      env:
+        PACKAGES: ${{ steps.packages.outputs.packages }}
+      run: |
+        for PACKAGE in ${PACKAGES//,/ }; do
+          echo $PACKAGE
+          (cd $PACKAGE; npm ci)
+        done
+
+    - name: Build
+      env:
+        PACKAGES: ${{ steps.packages.outputs.packages }}
+      run: |
+        for PACKAGE in ${PACKAGES//,/ }; do
+          echo $PACKAGE
+          (cd $PACKAGE; npm run build)
+        done
+
+    - name: Lint
+      env:
+        PACKAGES: ${{ steps.packages.outputs.packages }}
+      run: |
+        for PACKAGE in ${PACKAGES//,/ }; do
+          echo $PACKAGE
+          (cd $PACKAGE; npm run lint:js)
+        done
+
+    - name: Test
+      env:
+        PACKAGES: ${{ steps.packages.outputs.packages }}
+      run: |
+        for PACKAGE in ${PACKAGES//,/ }; do
+          echo $PACKAGE
+          (cd $PACKAGE; npm test test:js)
+        done
+

@@ -1,0 +1,69 @@
+name: Pull request labels
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, synchronize]
+
+jobs:
+  check-labels:
+    name: 'check labels'
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Check if version label is present
+      id: version
+      uses: actions/github-script@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const versionLabels = [
+            'Action: no bump',
+            'Action: beta bump',
+            'Action: patch bump',
+            'Action: minor bump',
+            'Action: major bump',
+          ];
+
+          const { data: labels } = await github.issues.listLabelsOnIssue({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            per_page: 100,
+          });
+
+          const versionLabelsPresent = labels
+            .filter(label => versionLabels.includes(label.name))
+
+          if (versionLabelsPresent.length === 1) {
+            console.log(`::set-output name=versionLabel::${versionLabelsPresent[0].name}`)
+            return;
+          }
+
+          console.log(`::debug ::${versionLabelsPresent.length} matching labels`);
+
+          throw new Error(`Should have one and only one of ${versionLabels.join(', ')} labels`);
+
+    - name: Check if package label is present
+      id: package-label
+      if: |
+        steps.version.outputs.versionLabel != 'Action: no bump'
+      uses: actions/github-script@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { data: pullLabels } = await github.issues.listLabelsOnIssue({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            per_page: 100,
+          });
+
+          const labels = pullLabels.map(label => label.name);
+
+          const packageLabels = labels.filter(name => name.includes('packages/'));
+
+          console.log(`::debug ::${packageLabels.length} matching labels`);
+
+          if (packageLabels.length !== 1) {
+            throw new Error('Pull request should have only one package label');
+          }
