@@ -250,7 +250,7 @@ export function project<Projection>(
           })(),
         );
 
-        const removed = false;
+        let removed = false;
 
         return (): void => {
           // don't remove `listener` again if unsubscribe function has already
@@ -258,6 +258,8 @@ export function project<Projection>(
           if (removed) {
             return;
           }
+
+          removed = true;
 
           const index = listeners.indexOf(listener);
 
