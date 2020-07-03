@@ -1,0 +1,49 @@
+{
+  "name": "@iadvize-oss/store-react",
+  "version": "0.0.0",
+  "description": "React binding for @iadvize-oss/store",
+  "main": "dist/index.js",
+  "module": "esm/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "esm"
+  ],
+  "scripts": {
+    "build": "rm -rf dist esm && rollup -c",
+    "test:js": "jest --coverage",
+    "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx,.d.ts --cache",
+    "docs": "typedoc"
+  },
+  "homepage": "https://github.com/iadvize/store-library#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iadvize/store-library.git"
+  },
+  "keywords": [
+    "iAdvize"
+  ],
+  "bugs": {
+    "url": "https://github.com/iadvize/store-library/issues"
+  },
+  "author": "iAdvize developers",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@iadvize-oss/eslint-config": "^2.0.0",
+    "@iadvize-oss/eslint-config-jest": "^1.0.0",
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@types/jest": "^26.0.3",
+    "eslint": "^7.3.1",
+    "jest": "^26.1.0",
+    "rollup": "^2.18.2",
+    "rollup-plugin-multi-input": "^1.1.1",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "ts-jest": "^26.1.1",
+    "tslib": "^2.0.0",
+    "typedoc": "^0.17.8",
+    "typescript": "^3.9.6"
+  }
+}
