@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+-   Expose store lib
+
 ## [0.1.0]
 
 ### Changed
 
--   Init lib
+-   Init empty lib
