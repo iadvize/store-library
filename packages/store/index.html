@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@iadvize-oss/store - v0.0.0</title>
-	<meta name="description" content="Documentation for @iadvize-oss/store - v0.0.0">
+	<title>@iadvize-oss/store - v0.1.0</title>
+	<meta name="description" content="Documentation for @iadvize-oss/store - v0.1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">@iadvize-oss/store - v0.0.0</a>
+					<a href="index.html" class="title">@iadvize-oss/store - v0.1.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -56,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1>@iadvize-oss/store - v0.0.0</h1>
+			<h1>@iadvize-oss/store - v0.1.0</h1>
 		</div>
 	</div>
 </header>
@@ -64,10 +64,338 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#hello---1" id="hello---1" style="color: inherit; text-decoration: none;">
-					<h1>Hello - 1</h1>
+				<a href="#iadvizestore" id="iadvizestore" style="color: inherit; text-decoration: none;">
+					<h1>@iadvize/store</h1>
 				</a>
-				<p>This is a test package</p>
+				<p>This is a draft documentation for <code>@iadvize-oss/store</code>, a lightweight Javascript
+				store library.</p>
+				<a href="#why" id="why" style="color: inherit; text-decoration: none;">
+					<h1>Why</h1>
+				</a>
+				<p>We used to rely heavily on Redux at iAdvize, using the library as the defacto
+				state storage of our frontend apps.</p>
+				<p>We&#39;ve started to question this systemic use of Redux. We’re not the only ones as
+					we’ve seen actors of the frontend community having the same questions and
+				shipping alternatives that :</p>
+				<ul>
+					<li><p>want to respond to scaling issues, view-binding complexity and rendering
+						headache (React useState, Recoil)</p>
+					</li>
+					<li><p>want to respond to architecture issues, where the rule of having one only
+							store for all the data of the app does not make sense (Dan Abramov&#39;s famous
+							“local state is fine”, Recoil and the ecosystem of small store libs built with
+						React in mind like react-hooks-global-state)</p>
+					</li>
+					<li><p>want to offer a better developper experience, reducing the Redux boilerplate
+						and the reducer / middleware duality</p>
+					</li>
+				</ul>
+				<p>Listening on these discussions, and working on new internal apps, we started to
+				understand that Redux does not match all of our frontend app architectures. </p>
+				<p>Some of our apps rely only on GraphQL and do not need a global store. They will
+					use only a few local  <code>useState</code>.
+					Other apps follow a DDD / layers architecture were we would like to have a basic
+					store in the infrastructure layer with no functional api bound to it unlike what
+				Redux wants us to do with actions.</p>
+				<p>Other apps cannot rely on specific React-only store libraries like Recoil
+					because they also need to access this state in other parts of their codebase
+				where React isn&#39;t an option (legacy views, low-level code, etc.).</p>
+				<p>That’s why we created this new store library. </p>
+				<p>It’s lightweight. A store will only provide  <code>read</code>, <code>apply</code> and <code>subscribe</code>
+				methods, in the FP way. </p>
+				<p>It’s composable. You can take multiple stores and combine them. You can select
+				a subpart of one store’s state.</p>
+				<p>It offers a React binding library à la <code>react-redux</code> and a
+				Redux-devtools-compatible debugger.</p>
+				<a href="#basic-example" id="basic-example" style="color: inherit; text-decoration: none;">
+					<h1>Basic example</h1>
+				</a>
+				<pre><code class="language-typescript"><span class="hljs-keyword">type</span> Todo = {
+  done: <span class="hljs-built_in">boolean</span>;
+  label: <span class="hljs-built_in">string</span>;
+};
+
+<span class="hljs-keyword">type</span> State = Todo[];
+
+<span class="hljs-comment">// initialise the store with an initial state</span>
+<span class="hljs-keyword">const</span> todoStore = Store.create&lt;State&gt;(<span class="hljs-function">() =&gt;</span> [
+  { done: <span class="hljs-literal">false</span>, label: <span class="hljs-string">&quot;writtings some doc&quot;</span> },
+  { done: <span class="hljs-literal">true</span>, label: <span class="hljs-string">&quot;napping&quot;</span> },
+])();
+
+<span class="hljs-comment">// create a reducer function adding a new Todo</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoOnState</span>(<span class="hljs-params">newTodo: <span class="hljs-built_in">string</span></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
+    <span class="hljs-keyword">return</span> [
+      ...state,
+      { done: <span class="hljs-literal">false</span>, label: newTodo }
+    ];
+  }
+}
+
+<span class="hljs-comment">// associating the reducer function and a store instance</span>
+<span class="hljs-keyword">const</span> appendNewTodo = Store.liftAndApply(appendNewTodoOnState, todoStore);
+
+<span class="hljs-comment">// create a reducer function removing all todos, ie. returning and empty state</span>
+<span class="hljs-keyword">const</span> emptyTodosReducer = <span class="hljs-function">() =&gt;</span> [];
+
+<span class="hljs-comment">// associating the reducer function and a store instance</span>
+<span class="hljs-keyword">const</span> emptyTodos = todoStore.apply(emptyTodosReducer);
+
+<span class="hljs-comment">// registering a listener</span>
+<span class="hljs-keyword">const</span> subscribeToTodoStore = todoStore.subscribe(<span class="hljs-function"><span class="hljs-params">newState</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;newState&quot;</span>, newState);
+});
+
+<span class="hljs-comment">// applying the listener</span>
+<span class="hljs-keyword">const</span> unsubscribeFromTodoStore = subscribeToTodoStore();
+
+<span class="hljs-comment">// triggering a change</span>
+appendNewTodo(<span class="hljs-string">&quot;have drink with my colleagues&quot;</span>)();
+
+<span class="hljs-comment">// will log:</span>
+<span class="hljs-comment">// newState, [{done: false, label: &#x27;writtings some doc&#x27;},{done: true, label: &#x27;napping&#x27;},{done: false, label: &#x27;have drink with my colleagues&#x27;}]</span>
+
+<span class="hljs-comment">// emptying the store </span>
+emptyTodos();
+
+<span class="hljs-comment">// will log:</span>
+<span class="hljs-comment">// newState, []</span>
+
+<span class="hljs-comment">// removing the listener we don&#x27;t need anymore</span>
+unsubscribeFromTodoStore();</code></pre>
+				<a href="#reference" id="reference" style="color: inherit; text-decoration: none;">
+					<h1>Reference</h1>
+				</a>
+				<a href="#storecreate---store-creation" id="storecreate---store-creation" style="color: inherit; text-decoration: none;">
+					<h2><code>Store.create</code> - Store creation</h2>
+				</a>
+				<pre><code>Store.create&lt;State&gt;(initialState: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> State): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;State&gt;</code></pre><p>You create a store with <code>Store.create</code> by passing it a function that will return
+					your initial state. This will return you a function to call to create the
+				corresponding store as many times you need.</p>
+				<p><strong>Params</strong></p>
+				<ul>
+					<li><code>initialState: () =&gt; State</code> - Function that return the initial state</li>
+				</ul>
+				<p><strong>Returns</strong></p>
+				<p><code>() =&gt; Store&lt;State&gt;</code> - Effect to call to receive a Store initialized with the
+				initial state</p>
+				<p><strong>Example</strong></p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> createTodoStore = Store.create&lt;State&gt;(<span class="hljs-function">() =&gt;</span> [
+  { done: <span class="hljs-literal">false</span>, label: <span class="hljs-string">&quot;writtings some doc&quot;</span> },
+  { done: <span class="hljs-literal">true</span>, label: <span class="hljs-string">&quot;napping&quot;</span> }
+]);
+
+<span class="hljs-keyword">const</span> todoStore = createTodoStore();</code></pre>
+				<a href="#ltstoregtread---reading-the-state" id="ltstoregtread---reading-the-state" style="color: inherit; text-decoration: none;">
+					<h2><code>&lt;store&gt;.read</code> - Reading the state</h2>
+				</a>
+				<p>Call <code>&lt;store&gt;.read</code> to read the state.</p>
+				<pre><code><span class="hljs-symbol">&lt;store&gt;</span>.<span class="hljs-keyword">read</span>(): State</code></pre><p><strong>Returns</strong></p>
+				<p><code>State</code> - Returns the state. </p>
+				<p><strong>Example</strong></p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> state = store.read();
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;state&#x27;</span>, state);</code></pre>
+				<a href="#ltstoregtsubscribe---subscribing-to-state-change" id="ltstoregtsubscribe---subscribing-to-state-change" style="color: inherit; text-decoration: none;">
+					<h2><code>&lt;store&gt;.subscribe</code> - Subscribing to state change</h2>
+				</a>
+				<p>You subscribe to state changes with <code>&lt;store&gt;.subscribe</code>. It accepts a listener
+				that receives the new state as a parameter.</p>
+				<pre><code>&lt;store&gt;.subscribe(listener: Listener&lt;State&gt;): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Unsubscribe</code></pre><p><strong>Params</strong></p>
+				<ul>
+					<li><code>listener: Listener&lt;State&gt;</code> - Where
+						<code>Listener&lt;State&gt; = (state: State) =&gt; void</code>. The function that will be called
+					when state change with the new state as argument.</li>
+				</ul>
+				<p><strong>Returns</strong></p>
+				<p><code>() =&gt; Unsubscribe</code> - A function to call to apply the subscription as many times
+				you need. </p>
+				<p>When applying a subscription, you will receive in return an unsubscribe function
+					to call to unsubscribe this specific applied subscription where
+				<code>type Unsubscribe: () =&gt; void</code>.</p>
+				<p><strong>Example</strong></p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// prepare the subscription to change</span>
+<span class="hljs-comment">// subscribeToTodoStore :: () =&gt; Unsubscribe</span>
+<span class="hljs-keyword">const</span> subscribeToTodoStore = todoStore.subscribe(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span>
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;new state&#x27;</span>, state);
+);
+
+<span class="hljs-comment">// starting the listener</span>
+<span class="hljs-comment">// unsubscribeFromTodoStore :: () =&gt; void </span>
+<span class="hljs-keyword">const</span> unsubscribeFromTodoStore = subscribeToTodoStore();
+
+<span class="hljs-comment">// unsubscribe when you are done</span>
+unsubscribeFromTodoStore();</code></pre>
+				<a href="#ltstoregtapply---updating-state" id="ltstoregtapply---updating-state" style="color: inherit; text-decoration: none;">
+					<h2><code>&lt;store&gt;.apply</code> - Updating state</h2>
+				</a>
+				<p>Call <code>&lt;store&gt;.apply</code> with a reducer to update the store.</p>
+				<pre><code>&lt;store&gt;.apply(reducer: <span class="hljs-function"><span class="hljs-params">(state: State)</span> =&gt;</span> State): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">void</span></code></pre><p><strong>Params</strong></p>
+				<ul>
+					<li><code>reducer: (state: State) =&gt; State</code> - A function that receive a state and
+					return a new state.</li>
+				</ul>
+				<p><strong>Returns</strong></p>
+				<p><code>() =&gt; void</code> - An effect to call to apply the update synchronously.</p>
+				<p><strong>Example</strong></p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// preparing an update function</span>
+<span class="hljs-comment">// appendNewTodoOnState :: (newTodo: string) =&gt; (state: State) =&gt; State</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoOnState</span>(<span class="hljs-params">newTodo: <span class="hljs-built_in">string</span></span>) </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
+    <span class="hljs-keyword">return</span> [
+      ...state,
+      { done: <span class="hljs-literal">false</span>, label: newTodo }
+    ]
+  }
+}
+
+<span class="hljs-comment">// Preparing the update on the store</span>
+<span class="hljs-keyword">const</span> appendNewTodo = todoStore.apply(
+  appendNewTodoOnState(<span class="hljs-string">&#x27;have drink with my colleagues&#x27;</span>)
+);
+
+<span class="hljs-comment">// Applying the transformation</span>
+appendNewTodo();</code></pre>
+				<p>Here we apply a reducer function directly on the store instance and trigger the
+				change with the <code>appendNewTodo</code> function.</p>
+				<p>Of course we would need <code>appendNewTodo</code> to accept any todo rather than a preset
+				one:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// Preparing the update on the store</span>
+<span class="hljs-comment">// appendNewTodo :: (newTodo: string) =&gt; () =&gt; void</span>
+<span class="hljs-keyword">const</span> appendNewTodo = <span class="hljs-function">(<span class="hljs-params">newTodo: <span class="hljs-built_in">string</span></span>) =&gt;</span> todoStore.apply(
+  appendNewTodoOnState(newTodo)
+);
+
+<span class="hljs-comment">// Applying the transformation</span>
+appendNewTodo(<span class="hljs-string">&#x27;have drink with my colleagues&#x27;</span>)();</code></pre>
+				<p>Because this operation is so common, we can use <code>Store.liftAndApply</code> which will
+				handle the parameter passing for us and cut on the boilerplate:</p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// appendNewTodo :: (newTodo: string) =&gt; () =&gt; void</span>
+<span class="hljs-keyword">const</span> appendNewTodo = Store.liftAndApply(appendNewTodoOnState, todoStore);
+
+appendNewTodo(<span class="hljs-string">&#x27;have drink with my colleagues&#x27;</span>)();</code></pre>
+				<a href="#storeliftandapply---create-a-parametrized-update" id="storeliftandapply---create-a-parametrized-update" style="color: inherit; text-decoration: none;">
+					<h2><code>Store.liftAndApply</code> - create a parametrized update</h2>
+				</a>
+				<p>Call <code>Store.liftAndApply</code> to easily create an update effect function. Pass it
+					a function that given any parameters returns a reducer <code>State =&gt; State</code> and the
+				store.</p>
+				<pre><code><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Store</span>.</span></span>liftAndApply&lt;
+  State,
+  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-explicit-any</span>
+  Fn extends<span class="hljs-function"> (...<span class="hljs-params">args</span>: <span class="hljs-params">any</span>[]) =&gt;</span> Reducer&lt;State&gt;
+&gt;(fn: Fn, store: Store&lt;State&gt;):<span class="hljs-function"> (...<span class="hljs-params">args</span>: P<span class="hljs-params">arameters</span>&lt;F<span class="hljs-params">n</span>&gt;) =&gt;</span><span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> void</code></pre><p><strong>Params</strong></p>
+				<ul>
+					<li><p><code>fn: Fn</code> - Where <code>Fn extends (...args: any[]) =&gt; Reducer&lt;State&gt;</code> a function
+						that returns a reducer.</p>
+					</li>
+					<li><p><code>store: Store&lt;State&gt;</code> - The store we want to update.</p>
+					</li>
+				</ul>
+				<p><strong>Returns</strong></p>
+				<p>An function that accept <code>fn</code> arguments and return an effect to call to apply the
+				update synchronously.</p>
+				<p><strong>Example</strong></p>
+				<pre><code class="language-typescript"><span class="hljs-comment">// appendNewTodoOnState :: (newTodo: string, done: boolean) =&gt; (state: State) =&gt; State</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoOnState</span>(<span class="hljs-params">newTodo: <span class="hljs-built_in">string</span>, done: <span class="hljs-built_in">boolean</span></span>) </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
+    <span class="hljs-keyword">return</span> [
+      ...state,
+      { done, label: newTodo }
+    ]
+  }
+}
+
+<span class="hljs-comment">// appendNewTodo :: (newTodo: string, done: boolean) =&gt; () =&gt; void</span>
+<span class="hljs-keyword">const</span> appendNewTodo = Store.liftAndApply(appendNewTodo, todoStore);
+
+appendNewTodo(<span class="hljs-string">&#x27;Groceries already done&#x27;</span>, <span class="hljs-literal">true</span>);</code></pre>
+				<a href="#storeproject---stores-projection" id="storeproject---stores-projection" style="color: inherit; text-decoration: none;">
+					<h2><code>Store.project</code> - store(s) projection</h2>
+				</a>
+				<p>Use <code>Store.project</code> to create a new view from one or more stores.</p>
+				<pre><code>Store.project&lt;A, ..., ProjectionState&gt;(
+  stores: readonly [Store&lt;A&gt;, ...],
+  readProjection: <span class="hljs-function"><span class="hljs-params">(a: A, ...)</span> =&gt;</span> ProjectionState,
+  applyProjection: <span class="hljs-function"><span class="hljs-params">(newState: ProjectionState)</span> =&gt;</span> <span class="hljs-keyword">void</span>,
+): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;ProjectionState&gt;;</code></pre><p><strong>Params</strong></p>
+				<ul>
+					<li><p><code>stores: Store[]</code> - Array of one or more stores.</p>
+					</li>
+					<li><p><code>readProjection: (a: A, ...) =&gt; ProjectionState</code> - Function that return the
+						projection from stores states. Used when reading from the store.</p>
+					</li>
+					<li><p><code>applyProjection: (projection: ProjectionState) =&gt; void</code> - Function used when
+							writing to the store the new state. Usally used to update initial stores with
+						part of the new projection state.</p>
+					</li>
+				</ul>
+				<p><strong>Returns</strong></p>
+				<p><code>() =&gt; Store&lt;ProjectionState&gt;</code> - Effect to call to receive the projection Store</p>
+				<pre><code class="language-typescript">Store.project(
+  <span class="hljs-comment">// pass all stores you want to use for your projection</span>
+  stores: [storeA, storeB, ...],
+
+  <span class="hljs-comment">// readProjection: how to read the projection from the states of the initial stores ? </span>
+  (stateA, stateB, ...) =&gt; &lt;projection&gt;, <span class="hljs-comment">// return the projection from the states</span>
+
+  <span class="hljs-comment">// applyProjection: how to apply a projection change to the states of the initial stores ? </span>
+  (newProjection) =&gt; {
+    storeA.apply(<span class="hljs-function">() =&gt;</span> ...)();
+    storeB.apply(<span class="hljs-function">() =&gt;</span> ...)();
+    ...
+  },
+)();</code></pre>
+				<p>Note that <code>applyProjection</code> could do nothing. In this case, your projection
+				store can only be used to read and not to write.</p>
+				<a href="#single-store-projection" id="single-store-projection" style="color: inherit; text-decoration: none;">
+					<h3>Single store projection</h3>
+				</a>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> storeCelsius = Store.create(<span class="hljs-function">() =&gt;</span> <span class="hljs-number">20</span>)();
+
+<span class="hljs-keyword">const</span> storeFahrenheit = Store.project(
+  <span class="hljs-comment">// we use the storeCelsius as source</span>
+  stores: [storeCelsius],
+  <span class="hljs-comment">// readProjection: fahrenheit is celsius + 32</span>
+  (celsius) =&gt; celsius + <span class="hljs-number">32</span>,
+  <span class="hljs-comment">// applyProjection: we update celsius state from a fahrenheit number</span>
+  (fahrenheit) =&gt; {
+    storeCelsius.apply(<span class="hljs-function">() =&gt;</span> fahrenheit - <span class="hljs-number">32</span>)();
+  },
+)();</code></pre>
+				<p>Because <code>storeFahrenheit</code> is just a projection of <code>storeCelsius</code> when we update
+				any of the stores, the other will be updated too.</p>
+				<pre><code class="language-typescript">storeFahrenheit.apply(<span class="hljs-function">() =&gt;</span> <span class="hljs-number">32</span>))(); <span class="hljs-comment">// 32°F / 0°C</span>
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;temp. in Celsius&#x27;</span>, storeCelsius.read()); <span class="hljs-comment">// 0°C</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;temp. in Fahrenheit&#x27;</span>, storeFahrenheit.read()) <span class="hljs-comment">// 32°F</span>
+
+storeCelsius.apply(<span class="hljs-function">() =&gt;</span> <span class="hljs-number">20</span>))(); <span class="hljs-comment">// 52°F / 20°C</span>
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;temp. in Celsius&#x27;</span>, storeCelsius.read()); <span class="hljs-comment">// 20°C</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;temp. in Fahrenheit&#x27;</span>, storeFahrenheit.read()) <span class="hljs-comment">// 52°F</span></code></pre>
+				<a href="#multiple-store-projection" id="multiple-store-projection" style="color: inherit; text-decoration: none;">
+					<h3>Multiple store projection</h3>
+				</a>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> temperatureStore = Store.create(<span class="hljs-function">() =&gt;</span> <span class="hljs-number">20</span>)();
+<span class="hljs-keyword">const</span> windStore = Store.create(<span class="hljs-function">() =&gt;</span> ({
+  kts: <span class="hljs-number">10</span>,
+  direction: <span class="hljs-string">&#x27;NE&#x27;</span>
+}))();
+
+<span class="hljs-keyword">const</span> weatherStore = Store.project(
+  <span class="hljs-comment">// we use both temperatureStore and windStore as source</span>
+  stores: [temperatureStore, windStore],
+  <span class="hljs-comment">// readProjection: pretty simple, simply bundle the two state in an object</span>
+  (temperature, wind) =&gt; ({ temperature, wind }),
+  <span class="hljs-comment">// applyProjection: we extract both new states from the object and update the corresponding stores</span>
+  ({ temperature, wind }) =&gt; {
+    temperatureStore.apply(<span class="hljs-function">() =&gt;</span> temperature)();
+    windStore.apply(<span class="hljs-function">() =&gt;</span> wind)();
+  },
+);
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;weather&#x27;</span>, weatherStore.read());</code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -93,7 +421,9 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 		</div>
 	</div>
