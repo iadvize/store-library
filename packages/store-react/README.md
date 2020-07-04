@@ -1,5 +1,5 @@
-@iadvize/store
-==============
+@iadvize/store-react
+====================
 
 This the React binding library for `@iadvize/store`, a lightweight Javascript
 store library.
