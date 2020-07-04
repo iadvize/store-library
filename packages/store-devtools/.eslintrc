@@ -1,6 +1,5 @@
 {
   "extends": [
-    "@iadvize-oss/eslint-config/light-typescript",
-    "@iadvize-oss/eslint-config-jest"
+    "@iadvize-oss/eslint-config/light-typescript"
   ]
 }
