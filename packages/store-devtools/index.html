@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@iadvize-oss/store-devtools - v0.0.0</title>
-	<meta name="description" content="Documentation for @iadvize-oss/store-devtools - v0.0.0">
+	<title>@iadvize-oss/store-devtools - v0.1.0</title>
+	<meta name="description" content="Documentation for @iadvize-oss/store-devtools - v0.1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">@iadvize-oss/store-devtools - v0.0.0</a>
+					<a href="index.html" class="title">@iadvize-oss/store-devtools - v0.1.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -56,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1>@iadvize-oss/store-devtools - v0.0.0</h1>
+			<h1>@iadvize-oss/store-devtools - v0.1.0</h1>
 		</div>
 	</div>
 </header>
@@ -64,6 +64,33 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
+				<a href="#iadvizestore-devtools" id="iadvizestore-devtools" style="color: inherit; text-decoration: none;">
+					<h1>@iadvize/store-devtools</h1>
+				</a>
+				<p>Devtools for <code>@iadvize/store</code>, a lightweight Javascript store library.</p>
+				<p>Use <code>@iadvize/store-devtools</code> to debug your store with <a href="https://github.com/zalmoxisus/redux-devtools-extension">ReduxDevtools
+				extension</a>.</p>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h1>Usage</h1>
+				</a>
+				<pre><code>npm install <span class="hljs-title">@iadvize-oss</span>/<span class="hljs-keyword">store</span> <span class="hljs-title">@iadvize-oss</span>/<span class="hljs-keyword">store</span>-devtools</code></pre><p><code>@iadvize-oss/store</code> is a peer-dependency</p>
+				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+					<h1>Example</h1>
+				</a>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> Store <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@iadvize/store&#x27;</span>;
+<span class="hljs-keyword">import</span> { withDevtools } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@iadvize/store-devtools&#x27;</span>;
+
+<span class="hljs-keyword">const</span> store = withDevtools({
+  name: <span class="hljs-string">&#x27;my store&#x27;</span>,
+})(Store.create(<span class="hljs-function">() =&gt;</span> <span class="hljs-number">2</span>)());</code></pre>
+				<p>Instead of classic <code>Redux</code> action type, it will try to use the reducer function
+				name to log the change.</p>
+				<pre><code class="language-typescript">store.apply(
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">multiplyByTwo</span>(<span class="hljs-params">state: <span class="hljs-built_in">number</span></span>) </span>{
+    <span class="hljs-keyword">return</span> state * <span class="hljs-number">2</span>;
+  }
+)();</code></pre>
+				<p>Devtools will use <code>multiplyByTwo</code> as change type here.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -90,6 +117,7 @@
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 		</div>
 	</div>
