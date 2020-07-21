@@ -27,7 +27,7 @@ useState<State>(store: Store<State>, options?: Options<State>) => State
 
 **Params**
 
-- `store: Store<State>` - Array of one or more stores.
+- `store: Store<State>` - The store
 
 - `options: Options<State>` - Optional. See `Options` below.
 
@@ -52,12 +52,12 @@ function Component() {
 Use `createStateHook` to create a `useState` hook specific to a store.
 
 ```
-createStateHook<State>(store: Store<State>): (options?: Options<State>) => State
+createStateHook<State>(getStore: () => Store<State>): (options?: Options<State>) => State
 ```
 
 **Params**
 
-- `store: Store<State>` - Array of one or more stores.
+- `getStore: () => Store<State>` - A function returning the store.
 
 - `options: Options<State>` - Optional. See `Options` below.
 
@@ -70,7 +70,7 @@ createStateHook<State>(store: Store<State>): (options?: Options<State>) => State
 ```typescript
 const store = Store.create(() => 2)(); 
 
-const useState = createStateHook(store);
+const useState = createStateHook(() => store);
 
 function Component() {
   const state = useState();
@@ -96,7 +96,7 @@ useSelector<State, SubState>(
 
 - `selector: (state: State) => SubState` - Selector over state.
 
-- `store: Store<State>` - Array of one or more stores.
+- `store: Store<State>` - The store.
 
 - `options: Options<SubState>` - Optional. See `Options` below.
 
@@ -121,7 +121,7 @@ function Component() {
 Use `createSelectorHook` to create a `useSelector` hook specific to a store.
 
 ```
-createSelectorHook<State>(store: Store<State>): (
+createSelectorHook<State>(getStore: () => Store<State>): (
   selector: (state: State) => SubState,
   options?: Options<State>,
 ): State
@@ -129,7 +129,7 @@ createSelectorHook<State>(store: Store<State>): (
 
 **Params**
 
-- `store: Store<State>` - Array of one or more stores.
+- `getStore: () => Store<State>` - A function returning the store.
 
 - `selector: (state: State) => SubState` - Selector over state.
 

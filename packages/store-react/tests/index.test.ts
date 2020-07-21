@@ -40,7 +40,7 @@ describe('select', () => {
           count: 0,
         }))();
 
-        const useSelectorBind = createSelectorHook(store);
+        const useSelectorBind = createSelectorHook(() => store);
 
         return [store, useSelectorBind] as const;
       },
@@ -192,7 +192,7 @@ describe('state', () => {
           count: 0,
         }))();
 
-        const useStateBind = createStateHook(store);
+        const useStateBind = createStateHook(() => store);
 
         return [store, useStateBind] as const;
       },
