@@ -124,17 +124,21 @@ export function useState<State>(
   return useSelector(identity, store, options);
 }
 
-export function createStateHook<State>(store: Store.Store<State>) {
+export function createStateHook<State>(getStore: () => Store.Store<State>) {
   return function useStateS(options?: Options<State>) {
+    const store = getStore();
+
     return useState(store, options);
   };
 }
 
-export function createSelectorHook<State>(store: Store.Store<State>) {
+export function createSelectorHook<State>(getStore: () => Store.Store<State>) {
   return function useSelectorS<SelectedState>(
     selector: (state: State) => SelectedState,
     options?: Options<SelectedState>,
   ) {
+    const store = getStore();
+
     return useSelector(selector, store, options);
   };
 }
