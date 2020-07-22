@@ -51,7 +51,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "fp-ts": "^2.7.0"
+    "fp-ts": "^2.7.1"
   },
   "peerDependencies": {
     "@iadvize-oss/store": "*",
