@@ -84,7 +84,7 @@
 				<p>Hook to get store&#39;s state. Will subscribe to change and cause rerender.</p>
 				<pre><code>useState<span class="hljs-symbol">&lt;State&gt;</span>(store: Store<span class="hljs-symbol">&lt;State&gt;</span>, <span class="hljs-keyword">options</span>?: Options<span class="hljs-symbol">&lt;State&gt;</span>) =&gt; State</code></pre><p><strong>Params</strong></p>
 				<ul>
-					<li><p><code>store: Store&lt;State&gt;</code> - Array of one or more stores.</p>
+					<li><p><code>store: Store&lt;State&gt;</code> - The store</p>
 					</li>
 					<li><p><code>options: Options&lt;State&gt;</code> - Optional. See <code>Options</code> below.</p>
 					</li>
@@ -103,9 +103,9 @@
 					<h2><code>createStateHook</code></h2>
 				</a>
 				<p>Use <code>createStateHook</code> to create a <code>useState</code> hook specific to a store.</p>
-				<pre><code>createStateHook<span class="hljs-symbol">&lt;State&gt;</span>(store: Store<span class="hljs-symbol">&lt;State&gt;</span>): (<span class="hljs-keyword">options</span>?: Options<span class="hljs-symbol">&lt;State&gt;</span>) =&gt; State</code></pre><p><strong>Params</strong></p>
+				<pre><code>createStateHook&lt;State&gt;(getStore: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;State&gt;): <span class="hljs-function"><span class="hljs-params">(options?: Options&lt;State&gt;)</span> =&gt;</span> State</code></pre><p><strong>Params</strong></p>
 				<ul>
-					<li><p><code>store: Store&lt;State&gt;</code> - Array of one or more stores.</p>
+					<li><p><code>getStore: () =&gt; Store&lt;State&gt;</code> - A function returning the store.</p>
 					</li>
 					<li><p><code>options: Options&lt;State&gt;</code> - Optional. See <code>Options</code> below.</p>
 					</li>
@@ -115,7 +115,7 @@
 				<p><strong>Example</strong></p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> store = Store.create(<span class="hljs-function">() =&gt;</span> <span class="hljs-number">2</span>)();
 
-<span class="hljs-keyword">const</span> useState = createStateHook(store);
+<span class="hljs-keyword">const</span> useState = createStateHook(<span class="hljs-function">() =&gt;</span> store);
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Component</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">const</span> state = useState();
@@ -135,7 +135,7 @@
 				<ul>
 					<li><p><code>selector: (state: State) =&gt; SubState</code> - Selector over state.</p>
 					</li>
-					<li><p><code>store: Store&lt;State&gt;</code> - Array of one or more stores.</p>
+					<li><p><code>store: Store&lt;State&gt;</code> - The store.</p>
 					</li>
 					<li><p><code>options: Options&lt;SubState&gt;</code> - Optional. See <code>Options</code> below.</p>
 					</li>
@@ -154,12 +154,12 @@
 					<h2><code>createSelectorHook</code></h2>
 				</a>
 				<p>Use <code>createSelectorHook</code> to create a <code>useSelector</code> hook specific to a store.</p>
-				<pre><code>createSelectorHook<span class="hljs-variable">&lt;State&gt;</span>(store: Store<span class="hljs-variable">&lt;State&gt;</span>): (
+				<pre><code>createSelectorHook<span class="hljs-variable">&lt;State&gt;</span>(getStore: () =&gt; Store<span class="hljs-variable">&lt;State&gt;</span>): (
   selector: (<span class="hljs-keyword">state</span>: State) =&gt; SubState,
   options?: Options<span class="hljs-variable">&lt;State&gt;</span>,
 ): State</code></pre><p><strong>Params</strong></p>
 				<ul>
-					<li><p><code>store: Store&lt;State&gt;</code> - Array of one or more stores.</p>
+					<li><p><code>getStore: () =&gt; Store&lt;State&gt;</code> - A function returning the store.</p>
 					</li>
 					<li><p><code>selector: (state: State) =&gt; SubState</code> - Selector over state.</p>
 					</li>
