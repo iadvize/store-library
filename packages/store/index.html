@@ -131,7 +131,8 @@ unsubscribeFromTodoStore();</code></pre>
 				<a href="#storecreate---store-creation" id="storecreate---store-creation" style="color: inherit; text-decoration: none;">
 					<h2><code>Store.create</code> - Store creation</h2>
 				</a>
-				<pre><code>Store.create&lt;State&gt;(initialState: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> State): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;State&gt;</code></pre><p>You create a store with <code>Store.create</code> by passing it a function that will return
+				<pre><code>Store.create&lt;State&gt;(initialState: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> State): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;State&gt;</code></pre>
+				<p>You create a store with <code>Store.create</code> by passing it a function that will return
 					your initial state. This will return you a function to call to create the
 				corresponding store as many times you need.</p>
 				<p><strong>Params</strong></p>
@@ -152,7 +153,8 @@ unsubscribeFromTodoStore();</code></pre>
 					<h2><code>&lt;store&gt;.read</code> - Reading the state</h2>
 				</a>
 				<p>Call <code>&lt;store&gt;.read</code> to read the state.</p>
-				<pre><code><span class="hljs-symbol">&lt;store&gt;</span>.<span class="hljs-keyword">read</span>(): State</code></pre><p><strong>Returns</strong></p>
+				<pre><code><span class="hljs-symbol">&lt;store&gt;</span>.<span class="hljs-keyword">read</span>(): State</code></pre>
+				<p><strong>Returns</strong></p>
 				<p><code>State</code> - Returns the state. </p>
 				<p><strong>Example</strong></p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> state = store.read();
@@ -162,7 +164,8 @@ unsubscribeFromTodoStore();</code></pre>
 				</a>
 				<p>You subscribe to state changes with <code>&lt;store&gt;.subscribe</code>. It accepts a listener
 				that receives the new state as a parameter.</p>
-				<pre><code>&lt;store&gt;.subscribe(listener: Listener&lt;State&gt;): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Unsubscribe</code></pre><p><strong>Params</strong></p>
+				<pre><code>&lt;store&gt;.subscribe(listener: Listener&lt;State&gt;): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Unsubscribe</code></pre>
+				<p><strong>Params</strong></p>
 				<ul>
 					<li><code>listener: Listener&lt;State&gt;</code> - Where
 						<code>Listener&lt;State&gt; = (state: State) =&gt; void</code>. The function that will be called
@@ -191,7 +194,8 @@ unsubscribeFromTodoStore();</code></pre>
 					<h2><code>&lt;store&gt;.apply</code> - Updating state</h2>
 				</a>
 				<p>Call <code>&lt;store&gt;.apply</code> with a reducer to update the store.</p>
-				<pre><code>&lt;store&gt;.apply(reducer: <span class="hljs-function"><span class="hljs-params">(state: State)</span> =&gt;</span> State): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">void</span></code></pre><p><strong>Params</strong></p>
+				<pre><code>&lt;store&gt;.apply(reducer: <span class="hljs-function"><span class="hljs-params">(state: State)</span> =&gt;</span> State): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">void</span></code></pre>
+				<p><strong>Params</strong></p>
 				<ul>
 					<li><code>reducer: (state: State) =&gt; State</code> - A function that receive a state and
 					return a new state.</li>
@@ -245,7 +249,8 @@ appendNewTodo(<span class="hljs-string">&#x27;have drink with my colleagues&#x27
   State,
   <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-explicit-any</span>
   Fn extends<span class="hljs-function"> (...<span class="hljs-params">args</span>: <span class="hljs-params">any</span>[]) =&gt;</span> Reducer&lt;State&gt;
-&gt;(fn: Fn, store: Store&lt;State&gt;):<span class="hljs-function"> (...<span class="hljs-params">args</span>: P<span class="hljs-params">arameters</span>&lt;F<span class="hljs-params">n</span>&gt;) =&gt;</span><span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> void</code></pre><p><strong>Params</strong></p>
+&gt;(fn: Fn, store: Store&lt;State&gt;):<span class="hljs-function"> (...<span class="hljs-params">args</span>: P<span class="hljs-params">arameters</span>&lt;F<span class="hljs-params">n</span>&gt;) =&gt;</span><span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> void</code></pre>
+				<p><strong>Params</strong></p>
 				<ul>
 					<li><p><code>fn: Fn</code> - Where <code>Fn extends (...args: any[]) =&gt; Reducer&lt;State&gt;</code> a function
 						that returns a reducer.</p>
@@ -279,7 +284,8 @@ appendNewTodo(<span class="hljs-string">&#x27;Groceries already done&#x27;</span
   stores: readonly [Store&lt;A&gt;, ...],
   readProjection: <span class="hljs-function"><span class="hljs-params">(a: A, ...)</span> =&gt;</span> ProjectionState,
   applyProjection: <span class="hljs-function"><span class="hljs-params">(newState: ProjectionState)</span> =&gt;</span> <span class="hljs-keyword">void</span>,
-): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;ProjectionState&gt;;</code></pre><p><strong>Params</strong></p>
+): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;ProjectionState&gt;;</code></pre>
+				<p><strong>Params</strong></p>
 				<ul>
 					<li><p><code>stores: Store[]</code> - Array of one or more stores.</p>
 					</li>
