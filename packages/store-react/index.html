@@ -72,7 +72,8 @@
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
 					<h1>Installation</h1>
 				</a>
-				<pre><code>npm <span class="hljs-keyword">add</span> react <span class="hljs-title">@iadvize-oss</span>/<span class="hljs-keyword">store</span> <span class="hljs-title">@iadvize-oss</span>/<span class="hljs-keyword">store</span>-react</code></pre><p><code>react</code> and <code>@iadvize-oss/store</code> are peer dependencies</p>
+				<pre><code>npm <span class="hljs-keyword">add</span> react <span class="hljs-title">@iadvize-oss</span>/<span class="hljs-keyword">store</span> <span class="hljs-title">@iadvize-oss</span>/<span class="hljs-keyword">store</span>-react</code></pre>
+				<p><code>react</code> and <code>@iadvize-oss/store</code> are peer dependencies</p>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h1>Usage</h1>
 				</a>
@@ -82,7 +83,8 @@
 					<h2><code>useState</code></h2>
 				</a>
 				<p>Hook to get store&#39;s state. Will subscribe to change and cause rerender.</p>
-				<pre><code>useState<span class="hljs-symbol">&lt;State&gt;</span>(store: Store<span class="hljs-symbol">&lt;State&gt;</span>, <span class="hljs-keyword">options</span>?: Options<span class="hljs-symbol">&lt;State&gt;</span>) =&gt; State</code></pre><p><strong>Params</strong></p>
+				<pre><code>useState<span class="hljs-symbol">&lt;State&gt;</span>(store: Store<span class="hljs-symbol">&lt;State&gt;</span>, <span class="hljs-keyword">options</span>?: Options<span class="hljs-symbol">&lt;State&gt;</span>) =&gt; State</code></pre>
+				<p><strong>Params</strong></p>
 				<ul>
 					<li><p><code>store: Store&lt;State&gt;</code> - The store</p>
 					</li>
@@ -103,7 +105,8 @@
 					<h2><code>createStateHook</code></h2>
 				</a>
 				<p>Use <code>createStateHook</code> to create a <code>useState</code> hook specific to a store.</p>
-				<pre><code>createStateHook&lt;State&gt;(getStore: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;State&gt;): <span class="hljs-function"><span class="hljs-params">(options?: Options&lt;State&gt;)</span> =&gt;</span> State</code></pre><p><strong>Params</strong></p>
+				<pre><code>createStateHook&lt;State&gt;(getStore: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;State&gt;): <span class="hljs-function"><span class="hljs-params">(options?: Options&lt;State&gt;)</span> =&gt;</span> State</code></pre>
+				<p><strong>Params</strong></p>
 				<ul>
 					<li><p><code>getStore: () =&gt; Store&lt;State&gt;</code> - A function returning the store.</p>
 					</li>
@@ -131,7 +134,8 @@
   selector: (<span class="hljs-keyword">state</span>: State) =&gt; SubState,
   store: Store<span class="hljs-variable">&lt;State&gt;</span>,
   options: Options<span class="hljs-variable">&lt;SubState&gt;</span> = {},
-): SubState</code></pre><p><strong>Params</strong></p>
+): SubState</code></pre>
+				<p><strong>Params</strong></p>
 				<ul>
 					<li><p><code>selector: (state: State) =&gt; SubState</code> - Selector over state.</p>
 					</li>
@@ -157,7 +161,8 @@
 				<pre><code>createSelectorHook<span class="hljs-variable">&lt;State&gt;</span>(getStore: () =&gt; Store<span class="hljs-variable">&lt;State&gt;</span>): (
   selector: (<span class="hljs-keyword">state</span>: State) =&gt; SubState,
   options?: Options<span class="hljs-variable">&lt;State&gt;</span>,
-): State</code></pre><p><strong>Params</strong></p>
+): State</code></pre>
+				<p><strong>Params</strong></p>
 				<ul>
 					<li><p><code>getStore: () =&gt; Store&lt;State&gt;</code> - A function returning the store.</p>
 					</li>
