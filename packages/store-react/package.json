@@ -38,7 +38,7 @@
     "@testing-library/react-hooks": "^3.4.1",
     "@types/jest": "^26.0.10",
     "eslint": "^7.7.0",
-    "jest": "^26.4.0",
+    "jest": "^26.4.2",
     "react": "^16.13.1",
     "react-test-renderer": "^16.13.1",
     "rollup": "^2.26.5",
