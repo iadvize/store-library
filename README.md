@@ -29,8 +29,8 @@ understand that Redux does not match all of our frontend app architectures.
 
 Some of our apps rely only on GraphQL and do not need a global store. They will
 use only a few local  `useState`. 
-Other apps follow a DDD / layers architecture were we would like to have a basic
-store in the infrastructure layer with no functional api bound to it unlike what
+Other apps follow a DDD / layers architecture were we would like to have basic
+stores in the infrastructure layer with no functional api bound to it unlike what
 Redux wants us to do with actions.
 
 Other apps cannot rely on specific React-only store libraries like Recoil
