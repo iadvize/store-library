@@ -132,7 +132,7 @@ describe('select', () => {
     // inspired by react-redux
     it('allows other equality functions to prevent unnecessary updates', () => {
       const equals = (currentState: number, nextState: number) => {
-        return currentState - nextState <= 1;
+        return currentState === 1 && nextState === 2;
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -140,14 +140,23 @@ describe('select', () => {
 
       renderHook(() => {
         const result = useSelectorBind((s) => s.count, { equals });
+
         renderedItems.push(result);
       });
 
-      expect(renderedItems).toHaveLength(1);
+      expect(renderedItems).toHaveLength(2);
 
       act(store.apply(incrementCount));
 
-      expect(renderedItems).toHaveLength(1);
+      expect(renderedItems).toHaveLength(3);
+
+      act(store.apply(incrementCount)); // should do nothing
+
+      expect(renderedItems).toHaveLength(3);
+
+      act(store.apply(incrementCount));
+
+      expect(renderedItems).toHaveLength(4);
     });
 
     // inspired by react-redux

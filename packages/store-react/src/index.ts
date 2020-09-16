@@ -64,22 +64,28 @@ export function useSelector<State, SubState>(
   if (typeof selector !== 'function') {
     throw new Error('Selector need to be a function');
   }
+  const [, forceRender] = React.useReducer((s) => s + 1, 0);
 
-  const equals = options.equals || Eq.strictEqual;
+  const equals = options.equals || Eq.eqStrict.equals;
 
-  const [currentSubState, updateCurrentSubState] = React.useState(
-    selector(store.read()),
-  );
+  const latestSelector = React.useRef<typeof selector>(selector);
+  const latestSubState = React.useRef(selector(store.read()));
+
+  if (selector !== latestSelector.current) {
+    latestSelector.current = selector;
+  }
 
   useIsomorphicLayoutEffect(() => {
     function checkForUpdates(newState: State) {
-      const newSubState = selector(newState);
+      const newSubState = latestSelector.current(newState);
 
-      if (equals(currentSubState, newSubState)) {
+      if (equals(latestSubState.current, newSubState)) {
         return;
       }
 
-      updateCurrentSubState(newSubState);
+      latestSubState.current = newSubState;
+
+      forceRender();
     }
 
     const unsubscribe = store.subscribe(checkForUpdates)();
@@ -89,9 +95,9 @@ export function useSelector<State, SubState>(
     return unsubscribe;
   }, [store]);
 
-  React.useDebugValue(currentSubState);
+  React.useDebugValue(latestSubState.current);
 
-  return currentSubState;
+  return latestSubState.current;
 }
 
 /**
