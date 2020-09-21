@@ -33,7 +33,7 @@
   "devDependencies": {
     "@iadvize-oss/eslint-config": "^2.0.0",
     "@iadvize-oss/eslint-config-jest": "^1.0.0",
-    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-commonjs": "^15.1.0",
     "@types/jest": "^26.0.14",
     "eslint": "^7.9.0",
     "jest": "^26.4.2",
