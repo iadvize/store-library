@@ -36,7 +36,7 @@
     "@iadvize-oss/store": "^0.1.1-beta.1",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
-    "@testing-library/react-hooks": "^3.4.1",
+    "@testing-library/react-hooks": "^3.4.2",
     "@types/jest": "^26.0.14",
     "eslint": "^7.10.0",
     "jest": "^26.4.2",
