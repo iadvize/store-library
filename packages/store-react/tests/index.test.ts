@@ -46,10 +46,12 @@ describe('select', () => {
       },
     ],
   ])('%s', (_, setupFunction) => {
-    const incrementCount = (state: State) => ({
-      ...state,
-      count: state.count + 1,
-    });
+    const incrementCount = (state: State) => {
+      return {
+        ...state,
+        count: state.count + 1,
+      };
+    };
 
     let [store, useSelectorBind] = setupFunction();
 
@@ -131,32 +133,34 @@ describe('select', () => {
 
     // inspired by react-redux
     it('allows other equality functions to prevent unnecessary updates', () => {
-      const equals = (currentState: number, nextState: number) => {
+      function customEquals(currentState: number, nextState: number) {
         return currentState === 1 && nextState === 2;
-      };
+      }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const renderedItems: any[] = [];
 
       renderHook(() => {
-        const result = useSelectorBind((s) => s.count, { equals });
+        const result = useSelectorBind((s) => s.count, {
+          equals: customEquals,
+        });
 
         renderedItems.push(result);
       });
+
+      expect(renderedItems).toHaveLength(1);
+
+      act(store.apply(incrementCount));
+
+      expect(renderedItems).toHaveLength(2);
+
+      act(store.apply(incrementCount)); // should do nothing
 
       expect(renderedItems).toHaveLength(2);
 
       act(store.apply(incrementCount));
 
       expect(renderedItems).toHaveLength(3);
-
-      act(store.apply(incrementCount)); // should do nothing
-
-      expect(renderedItems).toHaveLength(3);
-
-      act(store.apply(incrementCount));
-
-      expect(renderedItems).toHaveLength(4);
     });
 
     // inspired by react-redux

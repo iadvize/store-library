@@ -66,38 +66,104 @@ export function useSelector<State, SubState>(
   }
   const [, forceRender] = React.useReducer((s) => s + 1, 0);
 
+  const state = store.read();
+
   const equals = options.equals || Eq.eqStrict.equals;
 
-  const latestSelector = React.useRef<typeof selector>(selector);
-  const latestSubState = React.useRef(selector(store.read()));
+  const stateRef = React.useRef(state);
+  const selectorRef = React.useRef(selector);
+  const equalsRef = React.useRef(equals);
+  const erroredRef = React.useRef(false);
 
-  if (selector !== latestSelector.current) {
-    latestSelector.current = selector;
+  const currentSubStateRef = React.useRef<SubState>();
+
+  if (currentSubStateRef.current === undefined) {
+    currentSubStateRef.current = selector(state);
   }
 
-  useIsomorphicLayoutEffect(() => {
-    function checkForUpdates(newState: State) {
-      const newSubState = latestSelector.current(newState);
+  let newStateSlice: SubState | undefined;
+  let hasNewStateSlice = false;
 
-      if (equals(latestSubState.current, newSubState)) {
+  // The selector or equalityFn need to be called during the render phase if
+  // they change.
+  // We also want legitimate errors to be visible so we re-run
+  // them if they errored in the subscriber.
+  if (
+    stateRef.current !== state ||
+    selectorRef.current !== selector ||
+    equalsRef.current !== equals ||
+    erroredRef.current
+  ) {
+    // Using local variables to avoid mutations in the render phase.
+    newStateSlice = selector(state);
+    hasNewStateSlice = !equalsRef.current(
+      currentSubStateRef.current,
+      newStateSlice,
+    );
+  }
+
+  // Syncing changes in useEffect.
+  useIsomorphicLayoutEffect(() => {
+    if (hasNewStateSlice) {
+      currentSubStateRef.current = newStateSlice;
+    }
+
+    stateRef.current = state;
+    selectorRef.current = selector;
+    equalsRef.current = equals;
+    erroredRef.current = false;
+  });
+
+  const stateBeforeSubscriptionRef = React.useRef(state);
+
+  useIsomorphicLayoutEffect(() => {
+    let unsubscribed = false;
+
+    const listener = () => {
+      if (unsubscribed) {
         return;
       }
 
-      latestSubState.current = newSubState;
+      try {
+        const nextState = store.read();
+        const nextStateSlice = selectorRef.current(nextState);
 
-      forceRender();
+        if (
+          !equalsRef.current(
+            currentSubStateRef.current as SubState,
+            nextStateSlice,
+          )
+        ) {
+          stateRef.current = nextState;
+          currentSubStateRef.current = nextStateSlice;
+
+          forceRender();
+        }
+      } catch (error) {
+        erroredRef.current = true;
+        forceRender();
+      }
+    };
+
+    const unsubscribe = store.subscribe(listener)();
+
+    if (store.read() !== stateBeforeSubscriptionRef.current) {
+      listener(); // state has changed before subscription
     }
 
-    const unsubscribe = store.subscribe(checkForUpdates)();
-
-    checkForUpdates(store.read());
-
-    return unsubscribe;
+    return () => {
+      unsubscribed = true;
+      unsubscribe();
+    };
   }, [store]);
 
-  React.useDebugValue(latestSubState.current);
+  const stateSliceToReturn = hasNewStateSlice
+    ? (newStateSlice as SubState)
+    : currentSubStateRef.current;
 
-  return latestSubState.current;
+  React.useDebugValue(stateSliceToReturn);
+
+  return stateSliceToReturn;
 }
 
 /**
