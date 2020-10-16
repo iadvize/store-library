@@ -53,7 +53,7 @@ const useIsomorphicLayoutEffect =
     const message = useSelector(state =\> state.message, store);
 
     return <div>\{message\}</div>
-  }
+  \}
  *
  */
 export function useSelector<State, SubState>(
@@ -186,7 +186,7 @@ export function useSelector<State, SubState>(
     const state = useState(store);
 
     return <div>\{state\}</div>
-  }
+  \}
  *
  */
 export function useState<State>(
