@@ -1,2 +1,4 @@
 .eslintcache
 coverage
+dist
+esm

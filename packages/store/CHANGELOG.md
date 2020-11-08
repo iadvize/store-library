@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [Beta 2]
+
+### Changed
+
+-   Remove `project`
+
+## [Beta 1]
+
 ### Changed
 
 -   Expose store lib
