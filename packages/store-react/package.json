@@ -33,7 +33,7 @@
   "devDependencies": {
     "@iadvize-oss/eslint-config": "^2.1.3",
     "@iadvize-oss/eslint-config-jest": "^1.2.1",
-    "@iadvize-oss/store": "^0.1.1-beta.1",
+    "@iadvize-oss/store": "^1.0.0",
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@testing-library/react-hooks": "^3.4.2",
