@@ -6,6 +6,8 @@ Devtools for `@iadvize/store`, a lightweight Javascript store library.
 Use `@iadvize/store-devtools` to debug your store with [ReduxDevtools
 extension](https://github.com/zalmoxisus/redux-devtools-extension).
 
+[📖 Documentation](https://iadvize.github.io/store-library/packages/store-devtools/)
+
 # Usage
 
 ```

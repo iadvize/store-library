@@ -3,6 +3,8 @@
 
 A lightweight Javascript store library.
 
+[📖 Documentation](https://iadvize.github.io/store-library/packages/store/)
+
 # Basic example
 
 ```typescript

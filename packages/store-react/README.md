@@ -4,6 +4,8 @@
 This the React binding library for `@iadvize/store`, a lightweight Javascript
 store library.
 
+[📖 Documentation](https://iadvize.github.io/store-library/packages/store-react/)
+
 # Installation 
 
 ```
