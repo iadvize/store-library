@@ -4,6 +4,9 @@
 This is a monorepo for the experimental `@iadvize-oss/store`, a lightweight
 Javascript store library and its React bindings and devtools helper.
 
+[📖 Documentation](https://iadvize.github.io/store-library/packages/store/)
+
+
 # Why
 
 We used to rely heavily on Redux at iAdvize, using the library as the defacto
