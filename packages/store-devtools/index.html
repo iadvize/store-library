@@ -83,7 +83,7 @@
 <span class="hljs-keyword">import</span> { withDevtools } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@iadvize/store-devtools&#x27;</span>;
 
 <span class="hljs-keyword">const</span> store = withDevtools({
-  name: <span class="hljs-string">&#x27;my store&#x27;</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;my store&#x27;</span>,
 })(Store.create(<span class="hljs-function">() =&gt;</span> <span class="hljs-number">2</span>)());</code></pre>
 				<p>Instead of classic <code>Redux</code> action type, it will try to use the reducer function
 				name to log the change.</p>
