@@ -100,7 +100,7 @@
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Component</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">const</span> state = useState(store);
 
-  <span class="hljs-keyword">return</span> &lt;p&gt;{state}&lt;<span class="hljs-regexp">/p&gt;; /</span><span class="hljs-regexp">/ Will return &lt;p&gt;2&lt;/</span>p&gt;
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{state}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>; <span class="hljs-comment">// Will return &lt;p&gt;2&lt;/p&gt;</span>
 }</code></pre>
 				<a href="#createstatehook" id="createstatehook" style="color: inherit; text-decoration: none;">
 					<h2><code>createStateHook</code></h2>
@@ -124,7 +124,7 @@
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Component</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">const</span> state = useState();
 
-  <span class="hljs-keyword">return</span> &lt;p&gt;{state}&lt;<span class="hljs-regexp">/p&gt;; /</span><span class="hljs-regexp">/ Will return &lt;p&gt;2&lt;/</span>p&gt;
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{state}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>; <span class="hljs-comment">// Will return &lt;p&gt;2&lt;/p&gt;</span>
 }</code></pre>
 				<a href="#useselector" id="useselector" style="color: inherit; text-decoration: none;">
 					<h2><code>useSelector</code></h2>
@@ -148,12 +148,12 @@
 				<p><strong>Returns</strong></p>
 				<p><code>SubState</code> - The result of <code>selector</code> over state </p>
 				<p><strong>Example</strong></p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> store = Store.create(<span class="hljs-function">() =&gt;</span> ({ value: <span class="hljs-number">2</span> }))();
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> store = Store.create(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">value</span>: <span class="hljs-number">2</span> }))();
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Component</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">const</span> subState = useSelector(<span class="hljs-function">(<span class="hljs-params">{ value }</span>) =&gt;</span> value, store);
 
-  <span class="hljs-keyword">return</span> &lt;p&gt;{subState}&lt;<span class="hljs-regexp">/p&gt; /</span><span class="hljs-regexp">/ Will return &lt;p&gt;2&lt;/</span>p&gt;
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{subState}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span> <span class="hljs-comment">// Will return &lt;p&gt;2&lt;/p&gt;</span>
 }</code></pre>
 				<a href="#createselectorhook" id="createselectorhook" style="color: inherit; text-decoration: none;">
 					<h2><code>createSelectorHook</code></h2>
@@ -175,20 +175,20 @@
 				<p><strong>Returns</strong></p>
 				<p><code>State</code> - The full store state</p>
 				<p><strong>Example</strong></p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> store = Store.create(<span class="hljs-function">() =&gt;</span> ({ value: <span class="hljs-number">2</span> }))();
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> store = Store.create(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">value</span>: <span class="hljs-number">2</span> }))();
 
 <span class="hljs-keyword">const</span> useSelector = createSelectorHook(store);
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Component</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">const</span> subState = useSelector(<span class="hljs-function">(<span class="hljs-params">{ value }</span>) =&gt;</span> value);
 
-  <span class="hljs-keyword">return</span> &lt;p&gt;{subState}&lt;<span class="hljs-regexp">/p&gt;; /</span><span class="hljs-regexp">/ Will return &lt;p&gt;2&lt;/</span>p&gt;
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{subState}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>; <span class="hljs-comment">// Will return &lt;p&gt;2&lt;/p&gt;</span>
 }</code></pre>
 				<a href="#optionsltstategt" id="optionsltstategt" style="color: inherit; text-decoration: none;">
 					<h2><code>Options&lt;State&gt;</code></h2>
 				</a>
 				<pre><code class="language-typescript"><span class="hljs-keyword">type</span> Options&lt;State&gt; = Partial&lt;{
-  equals: <span class="hljs-function">(<span class="hljs-params">currentState: State, nextState: State</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">equals</span>: <span class="hljs-function">(<span class="hljs-params">currentState: State, nextState: State</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>;
 }&gt;;</code></pre>
 				<p>When the stores change, <code>useSelector</code> and <code>useState</code> hooks only force a
 				re-render if the hook result is different than the last result.</p>
@@ -200,7 +200,7 @@
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { shallowEqual } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;somelib&#x27;</span>;
 
 <span class="hljs-keyword">type</span> Todo = {
-  done: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">done</span>: <span class="hljs-built_in">boolean</span>;
   label: <span class="hljs-built_in">string</span>;
 };
 
@@ -210,8 +210,8 @@
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pendingDoneSelector</span>(<span class="hljs-params">state: state</span>) </span>{ <span class="hljs-comment">// returns a new object every time</span>
   <span class="hljs-keyword">return</span> {
-    pending: state.filter(<span class="hljs-function">(<span class="hljs-params">{ done }</span>) =&gt;</span> !done),
-    done: state.filter(<span class="hljs-function">(<span class="hljs-params">{ done }</span>) =&gt;</span> done),
+    <span class="hljs-attr">pending</span>: state.filter(<span class="hljs-function">(<span class="hljs-params">{ done }</span>) =&gt;</span> !done),
+    <span class="hljs-attr">done</span>: state.filter(<span class="hljs-function">(<span class="hljs-params">{ done }</span>) =&gt;</span> done),
   };
 }
 
@@ -219,7 +219,7 @@
   <span class="hljs-comment">// with the shallowEqual function, the selector will not force a re-render</span>
   <span class="hljs-comment">// when pendingDoneSelector returned object content doesn&#x27;t change, even if</span>
   <span class="hljs-comment">// it&#x27;s not strictly the same reference</span>
-  <span class="hljs-keyword">const</span> state = useSelector(pendingDoneSelector, store, { equals: shallowEqual });
+  <span class="hljs-keyword">const</span> state = useSelector(pendingDoneSelector, store, { <span class="hljs-attr">equals</span>: shallowEqual });
 
   <span class="hljs-keyword">return</span> ...
 }</code></pre>
