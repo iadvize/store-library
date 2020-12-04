@@ -73,7 +73,7 @@
 					<h1>Basic example</h1>
 				</a>
 				<pre><code class="language-typescript"><span class="hljs-keyword">type</span> Todo = {
-  done: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">done</span>: <span class="hljs-built_in">boolean</span>;
   label: <span class="hljs-built_in">string</span>;
 };
 
@@ -81,8 +81,8 @@
 
 <span class="hljs-comment">// initialise the store with an initial state</span>
 <span class="hljs-keyword">const</span> todoStore = Store.create&lt;State&gt;(<span class="hljs-function">() =&gt;</span> [
-  { done: <span class="hljs-literal">false</span>, label: <span class="hljs-string">&quot;writtings some doc&quot;</span> },
-  { done: <span class="hljs-literal">true</span>, label: <span class="hljs-string">&quot;napping&quot;</span> },
+  { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&quot;writtings some doc&quot;</span> },
+  { <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&quot;napping&quot;</span> },
 ])();
 
 <span class="hljs-comment">// create a reducer function adding a new Todo</span>
@@ -90,7 +90,7 @@
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
     <span class="hljs-keyword">return</span> [
       ...state,
-      { done: <span class="hljs-literal">false</span>, label: newTodo }
+      { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">label</span>: newTodo }
     ];
   }
 }
@@ -145,8 +145,8 @@ unsubscribeFromTodoStore();</code></pre>
 				initial state</p>
 				<p><strong>Example</strong></p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> createTodoStore = Store.create&lt;State&gt;(<span class="hljs-function">() =&gt;</span> [
-  { done: <span class="hljs-literal">false</span>, label: <span class="hljs-string">&quot;writtings some doc&quot;</span> },
-  { done: <span class="hljs-literal">true</span>, label: <span class="hljs-string">&quot;napping&quot;</span> }
+  { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&quot;writtings some doc&quot;</span> },
+  { <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&quot;napping&quot;</span> }
 ]);
 
 <span class="hljs-keyword">const</span> todoStore = createTodoStore();</code></pre>
@@ -210,7 +210,7 @@ unsubscribeFromTodoStore();</code></pre>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
     <span class="hljs-keyword">return</span> [
       ...state,
-      { done: <span class="hljs-literal">false</span>, label: newTodo }
+      { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">label</span>: newTodo }
     ]
   }
 }
@@ -268,7 +268,7 @@ appendNewTodo(<span class="hljs-string">&#x27;have drink with my colleagues&#x27
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
     <span class="hljs-keyword">return</span> [
       ...state,
-      { done, label: newTodo }
+      { done, <span class="hljs-attr">label</span>: newTodo }
     ]
   }
 }
