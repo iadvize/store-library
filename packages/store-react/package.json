@@ -1,6 +1,6 @@
 {
   "name": "@iadvize-oss/store-react",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React binding for @iadvize-oss/store",
   "main": "dist/index.js",
   "module": "esm/index.js",
