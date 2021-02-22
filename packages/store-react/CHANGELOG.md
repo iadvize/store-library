@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Dependencies updated
+- Update dependencies and typedoc config
 
 ## [1.0.0]
 

@@ -1,8 +1,9 @@
 {
-  "inputFiles": ["./src"],
-  "mode": "modules",
-  "entryPoint": "\"index\"",
-  "exclude": ["**/*+test.ts"],
+  "exclude": ["**/*+test.ts", "node_modules/**/*"],
   "includeVersion": true,
-  "out": "docs"
+  "out": "./docs",
+  "name": "@iadvize-oss/store-react",
+  "readme": "none",
+  "tsconfig": "./tsconfig.json",
+  "excludeExternals": true
 }
