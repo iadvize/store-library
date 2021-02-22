@@ -14,7 +14,7 @@
     "build": "rm -rf dist esm && rollup -c",
     "test:js": "echo Nothing to test",
     "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx,.d.ts --cache",
-    "docs": "typedoc"
+    "docs": "typedoc src/index.ts"
   },
   "homepage": "https://github.com/iadvize/store-library#readme",
   "repository": {
