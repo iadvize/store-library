@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for @iadvize-oss/store - v1.0.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -38,10 +39,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -51,11 +48,6 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
 			<h1>@iadvize-oss/store - v1.0.0</h1>
 		</div>
 	</div>
@@ -63,235 +55,458 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#iadvizestore" id="iadvizestore" style="color: inherit; text-decoration: none;">
-					<h1>@iadvize/store</h1>
-				</a>
-				<p>A lightweight Javascript store library.</p>
-				<p><a href="https://iadvize.github.io/store-library/packages/store/">📖 Documentation</a></p>
-				<a href="#basic-example" id="basic-example" style="color: inherit; text-decoration: none;">
-					<h1>Basic example</h1>
-				</a>
-				<pre><code class="language-typescript"><span class="hljs-keyword">type</span> Todo = {
-  <span class="hljs-attr">done</span>: <span class="hljs-built_in">boolean</span>;
-  label: <span class="hljs-built_in">string</span>;
-};
-
-<span class="hljs-keyword">type</span> State = Todo[];
-
-<span class="hljs-comment">// initialise the store with an initial state</span>
-<span class="hljs-keyword">const</span> todoStore = Store.create&lt;State&gt;(<span class="hljs-function">() =&gt;</span> [
-  { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&quot;writtings some doc&quot;</span> },
-  { <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&quot;napping&quot;</span> },
-])();
-
-<span class="hljs-comment">// create a reducer function adding a new Todo</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoOnState</span>(<span class="hljs-params">newTodo: <span class="hljs-built_in">string</span></span>) </span>{
-  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
-    <span class="hljs-keyword">return</span> [
-      ...state,
-      { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">label</span>: newTodo }
-    ];
-  }
-}
-
-<span class="hljs-comment">// associating the reducer function and a store instance</span>
-<span class="hljs-keyword">const</span> appendNewTodo = Store.liftAndApply(appendNewTodoOnState, todoStore);
-
-<span class="hljs-comment">// create a reducer function removing all todos, ie. returning and empty state</span>
-<span class="hljs-keyword">const</span> emptyTodosReducer = <span class="hljs-function">() =&gt;</span> [];
-
-<span class="hljs-comment">// associating the reducer function and a store instance</span>
-<span class="hljs-keyword">const</span> emptyTodos = todoStore.apply(emptyTodosReducer);
-
-<span class="hljs-comment">// registering a listener</span>
-<span class="hljs-keyword">const</span> subscribeToTodoStore = todoStore.subscribe(<span class="hljs-function"><span class="hljs-params">newState</span> =&gt;</span> {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;newState&quot;</span>, newState);
-});
-
-<span class="hljs-comment">// applying the listener</span>
-<span class="hljs-keyword">const</span> unsubscribeFromTodoStore = subscribeToTodoStore();
-
-<span class="hljs-comment">// triggering a change</span>
-appendNewTodo(<span class="hljs-string">&quot;have drink with my colleagues&quot;</span>)();
-
-<span class="hljs-comment">// will log:</span>
-<span class="hljs-comment">// newState, [{done: false, label: &#x27;writtings some doc&#x27;},{done: true, label: &#x27;napping&#x27;},{done: false, label: &#x27;have drink with my colleagues&#x27;}]</span>
-
-<span class="hljs-comment">// emptying the store </span>
-emptyTodos();
-
-<span class="hljs-comment">// will log:</span>
-<span class="hljs-comment">// newState, []</span>
-
-<span class="hljs-comment">// removing the listener we don&#x27;t need anymore</span>
-unsubscribeFromTodoStore();</code></pre>
-				<a href="#reference" id="reference" style="color: inherit; text-decoration: none;">
-					<h1>Reference</h1>
-				</a>
-				<a href="#storecreate---store-creation" id="storecreate---store-creation" style="color: inherit; text-decoration: none;">
-					<h2><code>Store.create</code> - Store creation</h2>
-				</a>
-				<pre><code>Store.create&lt;State&gt;(initialState: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> State): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Store&lt;State&gt;</code></pre>
-				<p>You create a store with <code>Store.create</code> by passing it a function that will return
-					your initial state. This will return you a function to call to create the
-				corresponding store as many times you need.</p>
-				<p><strong>Params</strong></p>
-				<ul>
-					<li><code>initialState: () =&gt; State</code> - Function that return the initial state</li>
-				</ul>
-				<p><strong>Returns</strong></p>
-				<p><code>() =&gt; Store&lt;State&gt;</code> - Effect to call to receive a Store initialized with the
-				initial state</p>
-				<p><strong>Example</strong></p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> createTodoStore = Store.create&lt;State&gt;(<span class="hljs-function">() =&gt;</span> [
-  { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&quot;writtings some doc&quot;</span> },
-  { <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&quot;napping&quot;</span> }
-]);
-
-<span class="hljs-keyword">const</span> todoStore = createTodoStore();</code></pre>
-				<a href="#ltstoregtread---reading-the-state" id="ltstoregtread---reading-the-state" style="color: inherit; text-decoration: none;">
-					<h2><code>&lt;store&gt;.read</code> - Reading the state</h2>
-				</a>
-				<p>Call <code>&lt;store&gt;.read</code> to read the state.</p>
-				<pre><code><span class="hljs-symbol">&lt;store&gt;</span>.<span class="hljs-keyword">read</span>(): State</code></pre>
-				<p><strong>Returns</strong></p>
-				<p><code>State</code> - Returns the state. </p>
-				<p><strong>Example</strong></p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> state = store.read();
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;state&#x27;</span>, state);</code></pre>
-				<a href="#ltstoregtsubscribe---subscribing-to-state-change" id="ltstoregtsubscribe---subscribing-to-state-change" style="color: inherit; text-decoration: none;">
-					<h2><code>&lt;store&gt;.subscribe</code> - Subscribing to state change</h2>
-				</a>
-				<p>You subscribe to state changes with <code>&lt;store&gt;.subscribe</code>. It accepts a listener
-				that receives the new state as a parameter.</p>
-				<pre><code>&lt;store&gt;.subscribe(listener: Listener&lt;State&gt;): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Unsubscribe</code></pre>
-				<p><strong>Params</strong></p>
-				<ul>
-					<li><code>listener: Listener&lt;State&gt;</code> - Where
-						<code>Listener&lt;State&gt; = (state: State) =&gt; void</code>. The function that will be called
-					when state change with the new state as argument.</li>
-				</ul>
-				<p><strong>Returns</strong></p>
-				<p><code>() =&gt; Unsubscribe</code> - A function to call to apply the subscription as many times
-				you need. </p>
-				<p>When applying a subscription, you will receive in return an unsubscribe function
-					to call to unsubscribe this specific applied subscription where
-				<code>type Unsubscribe: () =&gt; void</code>.</p>
-				<p><strong>Example</strong></p>
-				<pre><code class="language-typescript"><span class="hljs-comment">// prepare the subscription to change</span>
-<span class="hljs-comment">// subscribeToTodoStore :: () =&gt; Unsubscribe</span>
-<span class="hljs-keyword">const</span> subscribeToTodoStore = todoStore.subscribe(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span>
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;new state&#x27;</span>, state);
-);
-
-<span class="hljs-comment">// starting the listener</span>
-<span class="hljs-comment">// unsubscribeFromTodoStore :: () =&gt; void </span>
-<span class="hljs-keyword">const</span> unsubscribeFromTodoStore = subscribeToTodoStore();
-
-<span class="hljs-comment">// unsubscribe when you are done</span>
-unsubscribeFromTodoStore();</code></pre>
-				<a href="#ltstoregtapply---updating-state" id="ltstoregtapply---updating-state" style="color: inherit; text-decoration: none;">
-					<h2><code>&lt;store&gt;.apply</code> - Updating state</h2>
-				</a>
-				<p>Call <code>&lt;store&gt;.apply</code> with a reducer to update the store.</p>
-				<pre><code>&lt;store&gt;.apply(reducer: <span class="hljs-function"><span class="hljs-params">(state: State)</span> =&gt;</span> State): <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">void</span></code></pre>
-				<p><strong>Params</strong></p>
-				<ul>
-					<li><code>reducer: (state: State) =&gt; State</code> - A function that receive a state and
-					return a new state.</li>
-				</ul>
-				<p><strong>Returns</strong></p>
-				<p><code>() =&gt; void</code> - An effect to call to apply the update synchronously.</p>
-				<p><strong>Example</strong></p>
-				<pre><code class="language-typescript"><span class="hljs-comment">// preparing an update function</span>
-<span class="hljs-comment">// appendNewTodoOnState :: (newTodo: string) =&gt; (state: State) =&gt; State</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoOnState</span>(<span class="hljs-params">newTodo: <span class="hljs-built_in">string</span></span>) </span>{
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
-    <span class="hljs-keyword">return</span> [
-      ...state,
-      { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">label</span>: newTodo }
-    ]
-  }
-}
-
-<span class="hljs-comment">// Preparing the update on the store</span>
-<span class="hljs-keyword">const</span> appendNewTodo = todoStore.apply(
-  appendNewTodoOnState(<span class="hljs-string">&#x27;have drink with my colleagues&#x27;</span>)
-);
-
-<span class="hljs-comment">// Applying the transformation</span>
-appendNewTodo();</code></pre>
-				<p>Here we apply a reducer function directly on the store instance and trigger the
-				change with the <code>appendNewTodo</code> function.</p>
-				<p>Of course we would need <code>appendNewTodo</code> to accept any todo rather than a preset
-				one:</p>
-				<pre><code class="language-typescript"><span class="hljs-comment">// Preparing the update on the store</span>
-<span class="hljs-comment">// appendNewTodo :: (newTodo: string) =&gt; () =&gt; void</span>
-<span class="hljs-keyword">const</span> appendNewTodo = <span class="hljs-function">(<span class="hljs-params">newTodo: <span class="hljs-built_in">string</span></span>) =&gt;</span> todoStore.apply(
-  appendNewTodoOnState(newTodo)
-);
-
-<span class="hljs-comment">// Applying the transformation</span>
-appendNewTodo(<span class="hljs-string">&#x27;have drink with my colleagues&#x27;</span>)();</code></pre>
-				<p>Because this operation is so common, we can use <code>Store.liftAndApply</code> which will
-				handle the parameter passing for us and cut on the boilerplate:</p>
-				<pre><code class="language-typescript"><span class="hljs-comment">// appendNewTodo :: (newTodo: string) =&gt; () =&gt; void</span>
-<span class="hljs-keyword">const</span> appendNewTodo = Store.liftAndApply(appendNewTodoOnState, todoStore);
-
-appendNewTodo(<span class="hljs-string">&#x27;have drink with my colleagues&#x27;</span>)();</code></pre>
-				<a href="#storeliftandapply---create-a-parametrized-update" id="storeliftandapply---create-a-parametrized-update" style="color: inherit; text-decoration: none;">
-					<h2><code>Store.liftAndApply</code> - create a parametrized update</h2>
-				</a>
-				<p>Call <code>Store.liftAndApply</code> to easily create an update effect function. Pass it
-					a function that given any parameters returns a reducer <code>State =&gt; State</code> and the
-				store.</p>
-				<pre><code><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Store</span>.</span></span>liftAndApply&lt;
-  State,
-  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-explicit-any</span>
-  Fn extends<span class="hljs-function"> (...<span class="hljs-params">args</span>: <span class="hljs-params">any</span>[]) =&gt;</span> Reducer&lt;State&gt;
-&gt;(fn: Fn, store: Store&lt;State&gt;):<span class="hljs-function"> (...<span class="hljs-params">args</span>: P<span class="hljs-params">arameters</span>&lt;F<span class="hljs-params">n</span>&gt;) =&gt;</span><span class="hljs-function"> <span class="hljs-params">()</span> =&gt;</span> void</code></pre>
-				<p><strong>Params</strong></p>
-				<ul>
-					<li><p><code>fn: Fn</code> - Where <code>Fn extends (...args: any[]) =&gt; Reducer&lt;State&gt;</code> a function
-						that returns a reducer.</p>
-					</li>
-					<li><p><code>store: Store&lt;State&gt;</code> - The store we want to update.</p>
-					</li>
-				</ul>
-				<p><strong>Returns</strong></p>
-				<p>An function that accept <code>fn</code> arguments and return an effect to call to apply the
-				update synchronously.</p>
-				<p><strong>Example</strong></p>
-				<pre><code class="language-typescript"><span class="hljs-comment">// appendNewTodoOnState :: (newTodo: string, done: boolean) =&gt; (state: State) =&gt; State</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoOnState</span>(<span class="hljs-params">newTodo: <span class="hljs-built_in">string</span>, done: <span class="hljs-built_in">boolean</span></span>) </span>{
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNewTodoReducer</span>(<span class="hljs-params">state: State</span>) </span>{
-    <span class="hljs-keyword">return</span> [
-      ...state,
-      { done, <span class="hljs-attr">label</span>: newTodo }
-    ]
-  }
-}
-
-<span class="hljs-comment">// appendNewTodo :: (newTodo: string, done: boolean) =&gt; () =&gt; void</span>
-<span class="hljs-keyword">const</span> appendNewTodo = Store.liftAndApply(appendNewTodo, todoStore);
-
-appendNewTodo(<span class="hljs-string">&#x27;Groceries already done&#x27;</span>, <span class="hljs-literal">true</span>);</code></pre>
-			</div>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#listener" class="tsd-kind-icon">Listener</a></li>
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#reducer" class="tsd-kind-icon">Reducer</a></li>
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#store" class="tsd-kind-icon">Store</a></li>
+								<li class="tsd-kind-type-alias"><a href="index.html#unsubscribe" class="tsd-kind-icon">Unsubscribe</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-has-type-parameter"><a href="index.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-function tsd-has-type-parameter"><a href="index.html#liftandapply" class="tsd-kind-icon">lift<wbr>And<wbr>Apply</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
+					<a name="listener" class="tsd-anchor"></a>
+					<h3>Listener</h3>
+					<div class="tsd-signature tsd-kind-icon">Listener&lt;State&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/iadvize/store-library/blob/1292860/packages/store/src/index.ts#L3">index.ts:3</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>State</h4>
+						</li>
+					</ul>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>state: <span class="tsd-signature-type">State</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
+					<a name="reducer" class="tsd-anchor"></a>
+					<h3>Reducer</h3>
+					<div class="tsd-signature tsd-kind-icon">Reducer&lt;State&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">State</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/iadvize/store-library/blob/1292860/packages/store/src/index.ts#L1">index.ts:1</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>State</h4>
+						</li>
+					</ul>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>state: <span class="tsd-signature-type">State</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">State</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
+					<a name="store" class="tsd-anchor"></a>
+					<h3>Store</h3>
+					<div class="tsd-signature tsd-kind-icon">Store&lt;State&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>apply<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>reducer<span class="tsd-signature-symbol">: </span><a href="index.html#reducer" class="tsd-signature-type" data-tsd-kind="Type alias">Reducer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">; </span>read<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">; </span>subscribe<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>listener<span class="tsd-signature-symbol">: </span><a href="index.html#listener" class="tsd-signature-type" data-tsd-kind="Type alias">Listener</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="index.html#unsubscribe" class="tsd-signature-type" data-tsd-kind="Type alias">Unsubscribe</a><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/iadvize/store-library/blob/1292860/packages/store/src/index.ts#L7">index.ts:7</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>State</h4>
+						</li>
+					</ul>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> apply<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>reducer<span class="tsd-signature-symbol">: </span><a href="index.html#reducer" class="tsd-signature-type" data-tsd-kind="Type alias">Reducer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Apply a reducer on the state and update the store current state with the
+										result</p>
+									</div>
+									<dl class="tsd-comment-tags">
+										<dt>example</dt>
+										<dd><p>import * as Store from &#39;store&#39;;</p>
+											<p>const store = Store.create(() =&gt; 2)();</p>
+											<p>store.apply(state =&gt; state + 1)();</p>
+											<p>store.read() // 3</p>
+										</dd>
+									</dl>
+								</div>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>reducer<span class="tsd-signature-symbol">: </span><a href="index.html#reducer" class="tsd-signature-type" data-tsd-kind="Type alias">Reducer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>reducer: <a href="index.html#reducer" class="tsd-signature-type" data-tsd-kind="Type alias">Reducer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter-signature">
+														<ul class="tsd-signatures tsd-kind-type-literal">
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+														</ul>
+														<ul class="tsd-descriptions">
+															<li class="tsd-description">
+																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> read<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">State</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Read the store current state</p>
+									</div>
+									<dl class="tsd-comment-tags">
+										<dt>example</dt>
+										<dd><p>import * as Store from &#39;store&#39;;</p>
+											<p>const store = Store.create(() =&gt; 2)();</p>
+											<p>store.read() // 2</p>
+										</dd>
+									</dl>
+								</div>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">State</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> subscribe<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>listener<span class="tsd-signature-symbol">: </span><a href="index.html#listener" class="tsd-signature-type" data-tsd-kind="Type alias">Listener</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="index.html#unsubscribe" class="tsd-signature-type" data-tsd-kind="Type alias">Unsubscribe</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Subscribe a listener to state changes</p>
+									</div>
+									<p>The subscription returns a function to call to unsubscribe.</p>
+									<dl class="tsd-comment-tags">
+										<dt>example</dt>
+										<dd><p>import * as Store from &#39;store&#39;;</p>
+											<p>const store = Store.create(() =&gt; 2)();</p>
+											<p>const subscribe = store.subscribe(() =&gt; console.log(&#39;hello world&#39;));</p>
+											<p>const unsubscribe = subscribe();</p>
+											<p>store.apply(state =&gt; state + 1)();</p>
+											<p>// hello world</p>
+											<p>unsubscribe();</p>
+											<p>store.apply(state =&gt; state + 1)();</p>
+										</dd>
+									</dl>
+								</div>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>listener<span class="tsd-signature-symbol">: </span><a href="index.html#listener" class="tsd-signature-type" data-tsd-kind="Type alias">Listener</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="index.html#unsubscribe" class="tsd-signature-type" data-tsd-kind="Type alias">Unsubscribe</a></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>listener: <a href="index.html#listener" class="tsd-signature-type" data-tsd-kind="Type alias">Listener</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="index.html#unsubscribe" class="tsd-signature-type" data-tsd-kind="Type alias">Unsubscribe</a></h4>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter-signature">
+														<ul class="tsd-signatures tsd-kind-type-literal">
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.html#unsubscribe" class="tsd-signature-type" data-tsd-kind="Type alias">Unsubscribe</a></li>
+														</ul>
+														<ul class="tsd-descriptions">
+															<li class="tsd-description">
+																<h4 class="tsd-returns-title">Returns <a href="index.html#unsubscribe" class="tsd-signature-type" data-tsd-kind="Type alias">Unsubscribe</a></h4>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="unsubscribe" class="tsd-anchor"></a>
+					<h3>Unsubscribe</h3>
+					<div class="tsd-signature tsd-kind-icon">Unsubscribe<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/iadvize/store-library/blob/1292860/packages/store/src/index.ts#L5">index.ts:5</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+					<a name="create" class="tsd-anchor"></a>
+					<h3>create</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">create&lt;State&gt;<span class="tsd-signature-symbol">(</span>setupInitialState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="index.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/iadvize/store-library/blob/1292860/packages/store/src/index.ts#L82">index.ts:82</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Store creation with a initialState</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p>import * as Store from &#39;store&#39;;</p>
+										<p>const createNumberStore = Store.create(() =&gt; 2);</p>
+										<p>const store = createNumberStore();</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>State</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>setupInitialState: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">State</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">State</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="index.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-returns-title">Returns <a href="index.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+					<a name="liftandapply" class="tsd-anchor"></a>
+					<h3>lift<wbr>And<wbr>Apply</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">lift<wbr>And<wbr>Apply&lt;State, Fn&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Fn</span>, store<span class="tsd-signature-symbol">: </span><a href="index.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Fn</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/iadvize/store-library/blob/1292860/packages/store/src/index.ts#L164">index.ts:164</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Lift and apply a reducer factory, returning a function that, given some
+										arguments, will apply the reducer on the state and update the store current
+									state with the result</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p>import * as Store from &#39;store&#39;;</p>
+										<p>const store = Store.create(() =&gt; 2)();</p>
+										<p>// instead of:
+										const add = (n: number) =&gt; store.apply(state =&gt; state + n);</p>
+										<p>// write:
+										const add = Store.liftAndApply((n: number) =&gt; state =&gt; state + n, store);</p>
+										<p>add(2)();
+										store.read() // 4</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>State</h4>
+								</li>
+								<li>
+									<h4>Fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="index.html#reducer" class="tsd-signature-type" data-tsd-kind="Type alias">Reducer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>fn: <span class="tsd-signature-type">Fn</span></h5>
+								</li>
+								<li>
+									<h5>store: <a href="index.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Fn</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Fn</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Fn</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
+											<ul class="tsd-parameters">
+												<li class="tsd-parameter-signature">
+													<ul class="tsd-signatures tsd-kind-type-literal">
+														<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+													</ul>
+													<ul class="tsd-descriptions">
+														<li class="tsd-description">
+															<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_src_index_.html">&quot;src/index&quot;</a>
+					<li class="current ">
+						<a href="index.html">Exports</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="index.html#listener" class="tsd-kind-icon">Listener</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="index.html#reducer" class="tsd-kind-icon">Reducer</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="index.html#store" class="tsd-kind-icon">Store</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="index.html#unsubscribe" class="tsd-kind-icon">Unsubscribe</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="index.html#create" class="tsd-kind-icon">create</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="index.html#liftandapply" class="tsd-kind-icon">lift<wbr>And<wbr>Apply</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -301,11 +516,6 @@ appendNewTodo(<span class="hljs-string">&#x27;Groceries already done&#x27;</span
 	<div class="container">
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
 		</div>
 	</div>
 </footer>
