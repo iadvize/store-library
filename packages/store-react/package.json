@@ -34,7 +34,7 @@
     "@iadvize-oss/eslint-config": "^2.2.0",
     "@iadvize-oss/eslint-config-jest": "^1.2.1",
     "@iadvize-oss/store": "^1.1.0",
-    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@testing-library/react-hooks": "^5.1.0",
     "@types/jest": "^26.0.22",
