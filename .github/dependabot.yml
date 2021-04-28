@@ -1,0 +1,109 @@
+version: 2
+registries:
+  npm-registry-iadvize-jfrog-io-iadvize-api-npm-iadvize-npm:
+    type: npm-registry
+    url: https://iadvize.jfrog.io/iadvize/api/npm/iadvize-npm
+    username: "${{secrets.NPM_REGISTRY_IADVIZE_JFROG_IO_IADVIZE_API_NPM_IADVIZE_NPM_USERNAME}}"
+    password: "${{secrets.NPM_REGISTRY_IADVIZE_JFROG_IO_IADVIZE_API_NPM_IADVIZE_NPM_PASSWORD}}"
+
+updates:
+- package-ecosystem: npm
+  directory: "/packages/store"
+  schedule:
+    interval: daily
+    time: "00:00"
+    timezone: Europe/Paris
+  pull-request-branch-name:
+    separator: "-"
+  labels:
+  - "Action: no bump"
+  - packages/store
+  versioning-strategy: increase
+  ignore:
+  - dependency-name: rollup
+    versions:
+    - 2.41.3
+    - 2.43.0
+  - dependency-name: typedoc
+    versions:
+    - 0.20.21
+    - 0.20.22
+    - 0.20.26
+  commit-message:
+    prefix: misc
+  rebase-strategy: disabled
+  registries:
+  - npm-registry-iadvize-jfrog-io-iadvize-api-npm-iadvize-npm
+- package-ecosystem: npm
+  directory: "/packages/store-react"
+  schedule:
+    interval: daily
+    time: "00:00"
+    timezone: Europe/Paris
+  pull-request-branch-name:
+    separator: "-"
+  labels:
+  - "Action: no bump"
+  - packages/store-react
+  versioning-strategy: increase
+  ignore:
+  - dependency-name: fp-ts
+    versions:
+    - 2.10.0
+    - 2.10.3
+  - dependency-name: react
+    versions:
+    - 17.0.1
+  - dependency-name: typedoc
+    versions:
+    - 0.20.19
+    - 0.20.21
+    - 0.20.22
+    - 0.20.26
+    - 0.20.31
+  - dependency-name: typescript
+    versions:
+    - 4.1.4
+  - dependency-name: rollup
+    versions:
+    - 2.38.3
+  - dependency-name: "@testing-library/react-hooks"
+    versions:
+    - 5.0.3
+  commit-message:
+    prefix: misc
+  rebase-strategy: disabled
+  registries:
+  - npm-registry-iadvize-jfrog-io-iadvize-api-npm-iadvize-npm
+- package-ecosystem: npm
+  directory: "/packages/store-devtools"
+  schedule:
+    interval: daily
+    time: "00:00"
+    timezone: Europe/Paris
+  pull-request-branch-name:
+    separator: "-"
+  labels:
+  - "Action: no bump"
+  - packages/store-devtools
+  versioning-strategy: increase
+  ignore:
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.24
+    - 14.14.34
+    - 15.0.0
+  - dependency-name: rollup
+    versions:
+    - 2.38.1
+    - 2.38.2
+    - 2.42.1
+    - 2.43.0
+  - dependency-name: typedoc
+    versions:
+    - 0.20.31
+  commit-message:
+    prefix: misc
+  rebase-strategy: disabled
+  registries:
+  - npm-registry-iadvize-jfrog-io-iadvize-api-npm-iadvize-npm
