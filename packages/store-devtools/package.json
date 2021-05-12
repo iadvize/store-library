@@ -34,7 +34,7 @@
     "@iadvize-oss/eslint-config": "^2.2.0",
     "@iadvize-oss/store": "^1.1.0",
     "@rollup/plugin-commonjs": "^19.0.0",
-    "@types/node": "^15.0.2",
+    "@types/node": "^15.0.3",
     "eslint": "^7.26.0",
     "rollup": "^2.47.0",
     "rollup-plugin-multi-input": "^1.2.0",
