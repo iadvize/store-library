@@ -1,85 +1,71 @@
 name: Pull request changelog
 
 on:
-  pull_request:
+  pull_request_target:
     types: [labeled, unlabeled, synchronize]
 
 jobs:
   check-changelog:
     name: 'check changelog'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Check if version label is present
-      id: labels
-      uses: actions/github-script@v2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const versionLabels = [
-            'Action: no bump',
-            'Action: beta bump',
-            'Action: patch bump',
-            'Action: minor bump',
-            'Action: major bump',
-          ];
-
-          const { data: pullLabels } = await github.issues.listLabelsOnIssue({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.payload.pull_request.number,
-            per_page: 100,
-          });
-
-          const labels = pullLabels.map(label => label.name);
-
-          const versionLabelsPresent = labels
-            .filter(name => versionLabels.includes(name));
-
-          console.log(`::debug ::${versionLabelsPresent.length} matching labels`);
-
-          if (versionLabelsPresent.length !== 1) {
-            throw new Error('Should have one and only one version bump label');
-          }
-
-          const versionLabel = versionLabelsPresent[0];
-          console.log(`::set-output name=versionLabel::${versionLabel}`)
-
-          const packageLabels = labels.filter(name => name.includes('packages/'));
-
-          if (versionLabel === 'Action: no bump') {
-            return;
-          }
-
-          if (packageLabels.length !== 1) {
-            throw new Error('Pull request should have one package label');
-          }
-
-          console.log(`::set-output name=package::${packageLabels[0]}`)
-
-    - name: Fail if no changelog change when needed
-      if: |
-        steps.labels.outputs.versionLabel != 'Action: no bump'
-        && steps.labels.outputs.versionLabel != 'Action: beta bump'
-      uses: actions/github-script@v2
-      env:
-        PACKAGE: ${{ steps.labels.outputs.package }}
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const { data: files } = await github.pulls.listFiles({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: context.payload.pull_request.number,
-            per_page: 100,
-          });
-
-          const changelogFile = `${process.env.PACKAGE}/CHANGELOG.md`;
-
-          const fileNotDeletedNames = files
-            .filter(file => file.status === 'added' || file.status === 'modified')
-            .map(file => file.filename);
-
-          if (!fileNotDeletedNames.includes(changelogFile)) {
-            throw new Error('Package CHANGELOG.md Unreleased section shoud have line additions when PR is not a no-release')
-          }
+      - name: Check if version label is present
+        id: labels
+        uses: actions/github-script@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const versionLabels = [
+              'Action: no bump',
+              'Action: beta bump',
+              'Action: patch bump',
+              'Action: minor bump',
+              'Action: major bump',
+            ];
+            const { data: pullLabels } = await github.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+            const labels = pullLabels.map(label => label.name);
+            const versionLabelsPresent = labels
+              .filter(name => versionLabels.includes(name));
+            console.log(`::debug ::${versionLabelsPresent.length} matching labels`);
+            if (versionLabelsPresent.length !== 1) {
+              throw new Error('Should have one and only one version bump label');
+            }
+            const versionLabel = versionLabelsPresent[0];
+            console.log(`::set-output name=versionLabel::${versionLabel}`)
+            const packageLabels = labels.filter(name => name.includes('packages/'));
+            if (versionLabel === 'Action: no bump') {
+              return;
+            }
+            if (packageLabels.length !== 1) {
+              throw new Error('Pull request should have one package label');
+            }
+            console.log(`::set-output name=package::${packageLabels[0]}`)
+      - name: Fail if no changelog change when needed
+        if: |
+          steps.labels.outputs.versionLabel != 'Action: no bump'
+          && steps.labels.outputs.versionLabel != 'Action: beta bump'
+        uses: actions/github-script@v2
+        env:
+          PACKAGE: ${{ steps.labels.outputs.package }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: files } = await github.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+            const changelogFile = `${process.env.PACKAGE}/CHANGELOG.md`;
+            const fileNotDeletedNames = files
+              .filter(file => file.status === 'added' || file.status === 'modified')
+              .map(file => file.filename);
+            if (!fileNotDeletedNames.includes(changelogFile)) {
+              throw new Error('Package CHANGELOG.md Unreleased section shoud have line additions when PR is not a no-release')
+            }

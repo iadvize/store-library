@@ -1,20 +1,20 @@
 name: Pull request labels autocreation
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize]
 
 jobs:
   create-labels-from-files:
     name: 'create labels from files'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Create labels from files
       id: version
       uses: actions/github-script@v2
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.TOKEN_REPO_WRITE }}
         script: |
           const { data: files } = await github.pulls.listFiles({
             owner: context.repo.owner,
