@@ -3,14 +3,14 @@ name: Merge pull requests once ready
 on:
   check_suite:
     types: [completed]
-  pull_request:
+  pull_request_target:
     types: [labeled]
   pull_request_review:
     types: [submitted]
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     name: 'Merge pull requests'
 

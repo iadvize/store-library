@@ -1,7 +1,7 @@
 name: Canary deployment
 
 on:
-  pull_request:
+  pull_request_target:
     types: [labeled, synchronize]
     paths:
     - 'packages/**/*'
