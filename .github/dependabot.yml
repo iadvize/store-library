@@ -1,0 +1,35 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/packages/store"
+    schedule:
+      interval: "daily"
+      time: "02:00"
+    commit-message:
+      prefix: "misc"
+    labels:
+      - "Action: no bump"
+      - "packages/store"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/store-react"
+    schedule:
+      interval: "daily"
+      time: "02:00"
+    commit-message:
+      prefix: "misc"
+    labels:
+      - "Action: no bump"
+      - "packages/store-react"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/store-devtools"
+    schedule:
+      interval: "daily"
+      time: "02:00"
+    commit-message:
+      prefix: "misc"
+    labels:
+      - "Action: no bump"
+      - "packages/store-devtools"
