@@ -4,8 +4,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/packages/store"
     schedule:
-      interval: "daily"
-      time: "02:00"
+      interval: "monthly"
     commit-message:
       prefix: "misc"
     labels:
