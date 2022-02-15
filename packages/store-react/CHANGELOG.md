@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+-   Fix empty 1.1.3
+
 ## [1.1.3]
 
 -   Add React 16 as a peerDependency accepted
