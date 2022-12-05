@@ -38,7 +38,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@testing-library/react-hooks": "^7.0.0",
     "@types/jest": "^26.0.23",
-    "eslint": "^7.27.0",
+    "eslint": "^8.29.0",
     "jest": "^27.0.3",
     "react": "^17.0.2",
     "react-test-renderer": "^17.0.2",
