@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Check if there is at least one assignee
-      uses: actions/github-script@v2
+      uses: actions/github-script@4aed96e0ba636e3df2423e6887c9a83ef8522d6d # v2.1.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
