@@ -17,7 +17,7 @@ jobs:
     steps:
     - name: Extract package label
       id: name
-      uses: actions/github-script@v2
+      uses: actions/github-script@4aed96e0ba636e3df2423e6887c9a83ef8522d6d # v2.1.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -39,7 +39,7 @@ jobs:
 
           throw new Error('Pull request is not labeled with packages, should not be here');
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
       with:
         ref: master
         token: ${{ secrets.TOKEN_REPO_WRITE }}
@@ -64,7 +64,7 @@ jobs:
           git checkout -f master
         fi
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2.5.2
       with:
         node-version: '14'
 
@@ -121,7 +121,7 @@ jobs:
     steps:
     - name: Extract version label
       id: extract-labels
-      uses: actions/github-script@v2
+      uses: actions/github-script@4aed96e0ba636e3df2423e6887c9a83ef8522d6d # v2.1.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -172,7 +172,7 @@ jobs:
 
           console.log(`::set-output name=package::${packageLabels[0].name}`)
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
       with:
         ref: master
         token: ${{ secrets.TOKEN_REPO_WRITE }}
@@ -182,7 +182,7 @@ jobs:
         git config user.name "Github actions"
         git config user.email "github-actions@iadvize.com"
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2.5.2
       with:
         node-version: '14'
 
@@ -247,7 +247,7 @@ jobs:
 
     - name: Create deployment
       id: deployment
-      uses: actions/github-script@v2
+      uses: actions/github-script@4aed96e0ba636e3df2423e6887c9a83ef8522d6d # v2.1.0
       env:
         REF: ${{ steps.push.outputs.ref }}
         VERSION: ${{ steps.push.outputs.VERSION }}
@@ -303,7 +303,7 @@ jobs:
 
     - name: Create Release
       if: steps.extract-labels.outputs.versionBump != 'beta'
-      uses: actions/github-script@v2
+      uses: actions/github-script@4aed96e0ba636e3df2423e6887c9a83ef8522d6d # v2.1.0
       env:
         NAME: ${{ steps.push.outputs.NAME }}
         VERSION: ${{ steps.push.outputs.version }}
