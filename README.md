@@ -1,3 +1,6 @@
+> [!WARNING]
+> **Archived.** This repository is no longer maintained. The packages already published on npm remain available but will not receive updates.
+
 @iadvize/store
 ==============
 
